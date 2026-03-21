@@ -2,500 +2,275 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>SHINZO PLAYS • Elite Free Fire Tournaments</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Barlow+Condensed:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root {
+      --fire:   #ff4500;
+      --fire2:  #ff6a2f;
+      --fire3:  #ff9060;
+      --gold:   #ffb830;
+      --gold2:  #ffd675;
+      --ink:    #070507;
+      --ink2:   #0d090c;
+      --ink3:   #181018;
+      --ink4:   #221720;
+      --rim:    rgba(255,69,0,0.16);
+      --rim2:   rgba(255,69,0,0.32);
+      --text:   #f0e4de;
+      --muted:  #7a6060;
+      --muted2: #b09090;
     }
-
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
     body {
-      background: #03050a;
-      font-family: 'Inter', sans-serif;
-      color: #eef3fc;
-      line-height: 1.5;
+      background: var(--ink);
+      font-family: 'Rajdhani', sans-serif;
+      color: var(--text);
+      overflow-x: hidden;
       min-height: 100vh;
-      background-image: 
-        radial-gradient(circle at 30% 10%, rgba(0, 255, 156, 0.04) 0%, transparent 30%),
-        radial-gradient(circle at 85% 70%, rgba(0, 180, 255, 0.03) 0%, transparent 40%),
-        repeating-linear-gradient(45deg, rgba(0, 255, 156, 0.02) 0px, rgba(0, 255, 156, 0.02) 1px, transparent 1px, transparent 10px);
+      background-image: repeating-linear-gradient(
+        0deg,
+        rgba(255,255,255,0.01) 0px,
+        rgba(255,255,255,0.01) 1px,
+        transparent 1px,
+        transparent 4px
+      );
     }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1rem 1.5rem;
-      position: relative;
-      z-index: 2;
-    }
+    /* background orbs */
+    .bg { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+    .bg-o { position:absolute; border-radius:50%; filter:blur(90px); }
+    .bg-o1 { width:500px; height:500px; background:radial-gradient(circle,rgba(255,69,0,0.16),transparent 70%); top:-150px; left:-150px; animation:drift 16s ease-in-out infinite; }
+    .bg-o2 { width:350px; height:350px; background:radial-gradient(circle,rgba(255,100,0,0.10),transparent 70%); top:45%; right:-100px; animation:drift 20s ease-in-out infinite reverse; animation-delay:-8s; }
+    .bg-o3 { width:280px; height:280px; background:radial-gradient(circle,rgba(255,185,30,0.06),transparent 70%); bottom:5%; left:10%; animation:drift 24s ease-in-out infinite; animation-delay:-14s; }
+    @keyframes drift { 0%,100%{transform:translate(0,0);} 33%{transform:translate(28px,-22px);} 66%{transform:translate(-18px,24px);} }
 
-    /* ===== header & logo ===== */
-    .header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      margin: 1.5rem 0 3rem;
-    }
+    /* grain */
+    body::after { content:''; position:fixed; inset:0; z-index:1; pointer-events:none; opacity:0.03;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E"); }
 
-    .logo-pulse {
-      width: 140px;
-      height: 140px;
-      background: #0b1a1f;
-      border-radius: 50%;
-      padding: 10px;
-      margin-bottom: 1.8rem;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 40px rgba(0, 255, 156, 0.4);
-    }
+    .wrap { position:relative; z-index:2; max-width:480px; margin:0 auto; padding:0 20px; }
 
-    .logo-pulse::after {
-      content: '';
-      position: absolute;
-      inset: -5px;
-      border-radius: 50%;
-      padding: 5px;
-      background: linear-gradient(145deg, #00ff9c, #00cc88);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      opacity: 0.7;
-    }
+    /* NAV */
+    nav { display:flex; align-items:center; justify-content:space-between; padding:18px 0 16px; border-bottom:1px solid var(--rim); }
+    .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; letter-spacing:4px; color:var(--fire2); text-shadow:0 0 18px rgba(255,80,0,0.5); }
+    .nav-logo em { color:var(--gold); font-style:normal; }
+    .live-pill { display:flex; align-items:center; gap:6px; font-size:0.58rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--gold); background:rgba(255,184,48,0.08); border:1px solid rgba(255,184,48,0.25); border-radius:30px; padding:5px 12px; }
+    .live-dot { width:6px; height:6px; border-radius:50%; background:var(--fire); box-shadow:0 0 6px var(--fire); animation:blink 1.5s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
 
-    .logo {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      background: #111c22;
-      border: 2px solid #00ff9c;
-      box-shadow: inset 0 0 15px #00ff9c33, 0 0 30px #00ff9c;
-    }
+    /* HERO */
+    .hero { padding:48px 0 36px; text-align:center; }
 
-    /* fallback text logo if image missing */
-    .logo-fallback {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #1a2f2a, #0a1f1a);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 800;
-      font-size: 2.8rem;
-      color: #00ff9c;
-      text-shadow: 0 0 15px #00ff9c;
-      border: 2px solid #00ff9c;
-    }
+    .logo-wrap { width:140px; height:140px; margin:0 auto 34px; position:relative; display:flex; align-items:center; justify-content:center; }
+    .logo-ring { position:absolute; inset:0; border-radius:50%; border:1.5px solid rgba(255,69,0,0.28); animation:spin 20s linear infinite; }
+    .logo-ring::before { content:''; position:absolute; top:-5px; left:50%; transform:translateX(-50%); width:10px; height:10px; border-radius:50%; background:var(--fire); box-shadow:0 0 10px var(--fire),0 0 20px var(--fire); }
+    .logo-ring2 { position:absolute; inset:12px; border-radius:50%; border:1px solid rgba(255,69,0,0.12); animation:spin 32s linear infinite reverse; }
+    @keyframes spin { to{transform:rotate(360deg);} }
+    .logo-glow { position:absolute; inset:-14px; border-radius:50%; background:radial-gradient(circle,rgba(255,69,0,0.12),transparent 70%); animation:pulse 3.5s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:0.6;transform:scale(1);} 50%{opacity:1;transform:scale(1.09);} }
+    .logo-core { width:100px; height:100px; border-radius:50%; z-index:1; background:radial-gradient(circle at 35% 35%,var(--ink3),var(--ink) 70%); border:2px solid rgba(255,69,0,0.5); box-shadow:0 0 30px rgba(255,69,0,0.22),inset 0 0 18px rgba(255,69,0,0.08); display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue',sans-serif; font-size:2.5rem; color:var(--fire); text-shadow:0 0 18px var(--fire); overflow:hidden; }
+    .logo-core img { width:100%; height:100%; border-radius:50%; object-fit:cover; display:none; }
 
-    .glitch-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 800;
-      font-size: clamp(3rem, 12vw, 5.5rem);
-      text-transform: uppercase;
-      color: white;
-      text-shadow: 0.05em 0 0 rgba(255, 0, 100, 0.4), -0.05em -0.025em 0 rgba(0, 255, 156, 0.4);
-      animation: glitch 5s infinite;
-      letter-spacing: 2px;
-      line-height: 1.1;
-    }
+    .hero-eyebrow { display:inline-flex; align-items:center; gap:6px; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:4px; color:var(--gold); margin-bottom:10px; opacity:0; animation:fadeUp 0.6s 0.1s ease forwards; }
+    .hero-h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(4.2rem,22vw,6.5rem); line-height:0.87; letter-spacing:2px; color:#fff; opacity:0; animation:fadeUp 0.6s 0.3s ease forwards; }
+    .hero-h1 .blaze { display:block; color:var(--fire); text-shadow:0 0 40px rgba(255,69,0,0.75),0 0 80px rgba(255,69,0,0.2); position:relative; }
+    .hero-h1 .blaze::after { content:attr(data-t); position:absolute; inset:0; color:rgba(255,60,0,0.16); transform:translate(3px,4px); z-index:-1; }
+    .hero-sub { font-size:1.05rem; font-weight:500; color:var(--muted2); letter-spacing:0.4px; margin-top:14px; line-height:1.55; opacity:0; animation:fadeUp 0.6s 0.5s ease forwards; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(18px);} to{opacity:1;transform:none;} }
 
-    @keyframes glitch {
-      0%, 100% { text-shadow: 0.05em 0 0 rgba(255, 0, 100, 0.3), -0.05em -0.025em 0 rgba(0, 255, 156, 0.3); }
-      25% { text-shadow: -0.05em -0.025em 0 rgba(255, 0, 100, 0.4), 0.025em 0.05em 0 rgba(0, 255, 156, 0.4); }
-      50% { text-shadow: 0.025em 0.05em 0 rgba(255, 0, 100, 0.5), 0.05em 0 0 rgba(0, 255, 156, 0.5); }
-      75% { text-shadow: -0.05em 0 0 rgba(255, 0, 100, 0.3), 0.025em 0.05em 0 rgba(0, 255, 156, 0.3); }
-    }
+    .cta-wrap { margin-top:28px; opacity:0; animation:fadeUp 0.6s 0.7s ease forwards; }
+    .btn-dl { display:flex; align-items:center; justify-content:center; gap:10px; background:var(--fire); color:#fff; font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:1.35rem; letter-spacing:2.5px; text-transform:uppercase; padding:16px 28px; border-radius:10px; text-decoration:none; border:none; cursor:pointer; width:100%; box-shadow:0 0 35px rgba(255,69,0,0.45),0 8px 24px rgba(0,0,0,0.55); position:relative; overflow:hidden; transition:transform 0.15s,box-shadow 0.15s; }
+    .btn-dl::after { content:''; position:absolute; top:0; left:-120%; width:60%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.14),transparent); transform:skewX(-20deg); animation:shimmer 3.5s ease-in-out infinite; }
+    @keyframes shimmer { 0%{left:-120%;} 40%,100%{left:140%;} }
+    .btn-dl:active { transform:scale(0.97); }
+    .btn-dl i { font-size:1.15rem; }
+    .dl-info { margin-top:10px; font-size:0.72rem; font-weight:600; letter-spacing:1px; color:var(--muted); display:flex; align-items:center; justify-content:center; gap:14px; }
+    .dl-info span { display:flex; align-items:center; gap:4px; }
+    .dl-info i { color:var(--fire); font-size:0.6rem; }
 
-    .subhead {
-      font-size: 1.3rem;
-      font-weight: 300;
-      background: linear-gradient(145deg, #b0f0da, #a0d0ff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      margin-bottom: 1.5rem;
-      letter-spacing: 1px;
-    }
+    /* DIVIDERS & SECTION LABELS */
+    .divider { display:flex; align-items:center; gap:12px; margin:44px 0 28px; }
+    .div-line { flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--rim2),transparent); }
+    .div-txt { font-size:0.58rem; font-weight:700; text-transform:uppercase; letter-spacing:4px; color:var(--muted); }
+    .s-label { font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:4px; color:var(--fire); margin-bottom:4px; }
+    .s-head { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.4rem,10vw,3.4rem); letter-spacing:2px; color:#fff; line-height:1; margin-bottom:18px; }
+    .s-head em { color:var(--gold); font-style:normal; }
 
-    .tag-line {
-      max-width: 700px;
-      margin: 0 auto 3rem;
-      background: rgba(0, 30, 20, 0.35);
-      backdrop-filter: blur(8px);
-      padding: 1rem 2rem;
-      border-radius: 80px;
-      border: 1px solid rgba(0, 255, 156, 0.25);
-      font-weight: 400;
-      color: #ccf2e3;
-      box-shadow: 0 10px 20px -10px rgba(0,0,0,0.5);
-    }
+    /* FEATURE CARDS */
+    .feat-list { display:flex; flex-direction:column; gap:10px; margin-bottom:44px; }
+    .feat-card { display:flex; align-items:flex-start; gap:14px; background:var(--ink2); border:1px solid var(--rim); border-radius:14px; padding:16px; position:relative; overflow:hidden; transition:border-color 0.2s,transform 0.2s; }
+    .feat-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:linear-gradient(180deg,var(--fire),var(--gold)); transform:scaleY(0); transform-origin:bottom; transition:transform 0.25s ease; border-radius:3px 0 0 3px; }
+    .feat-card:active { border-color:var(--rim2); transform:translateX(4px); }
+    .feat-card:active::before { transform:scaleY(1); }
+    @media(hover:hover){ .feat-card:hover { border-color:var(--rim2); transform:translateX(4px); } .feat-card:hover::before { transform:scaleY(1); } }
+    .feat-icon { width:42px; height:42px; flex-shrink:0; background:rgba(255,69,0,0.09); border:1px solid rgba(255,69,0,0.28); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1rem; color:var(--fire2); margin-top:1px; }
+    .feat-body h3 { font-family:'Barlow Condensed',sans-serif; font-size:1.1rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#fff; margin-bottom:4px; display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+    .feat-body p { font-size:0.9rem; font-weight:500; color:var(--muted2); line-height:1.5; }
+    .badge { font-size:0.56rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--gold); background:rgba(255,184,48,0.1); border:1px solid rgba(255,184,48,0.28); border-radius:3px; padding:1px 6px; }
 
-    .tag-line i {
-      color: #00ff9c;
-      margin: 0 5px;
-    }
+    /* STEPS */
+    .steps-panel { background:var(--ink2); border:1px solid var(--rim); border-radius:16px; padding:20px 18px; margin-bottom:44px; position:relative; overflow:hidden; }
+    .steps-panel::after { content:'INSTALL'; position:absolute; right:-30px; bottom:-16px; font-family:'Bebas Neue',sans-serif; font-size:7rem; color:rgba(255,69,0,0.04); letter-spacing:8px; pointer-events:none; line-height:1; }
+    .step-row { display:flex; gap:14px; align-items:flex-start; padding:12px 0; border-bottom:1px solid rgba(255,69,0,0.06); }
+    .step-row:last-child { border-bottom:none; padding-bottom:0; }
+    .step-row:first-child { padding-top:0; }
+    .step-n { width:32px; height:32px; flex-shrink:0; background:var(--fire); border-radius:7px; display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue',sans-serif; font-size:1.1rem; color:#fff; letter-spacing:1px; box-shadow:0 0 12px rgba(255,69,0,0.38); }
+    .step-body h4 { font-family:'Barlow Condensed',sans-serif; font-size:1.05rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:#fff; margin-bottom:2px; }
+    .step-body p { font-size:0.88rem; font-weight:500; color:var(--muted2); line-height:1.5; }
 
-    /* ===== feature cards ===== */
-    .section-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 2.2rem;
-      font-weight: 700;
-      text-align: center;
-      margin: 4rem 0 2.5rem;
-      position: relative;
-    }
+    /* BIG DOWNLOAD BLOCK */
+    .dl-block { background:var(--ink3); border:1px solid rgba(255,69,0,0.26); border-radius:20px; padding:32px 20px; text-align:center; margin-bottom:36px; position:relative; overflow:hidden; }
+    .dl-block::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 20% 50%,rgba(255,69,0,0.09),transparent 55%),radial-gradient(ellipse at 80% 50%,rgba(255,185,30,0.05),transparent 55%); }
+    .dl-block > * { position:relative; z-index:1; }
+    .dl-eyebrow { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:4px; color:var(--gold); margin-bottom:8px; }
+    .dl-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,16vw,5rem); color:#fff; letter-spacing:4px; line-height:0.9; margin-bottom:6px; }
+    .dl-title em { display:block; color:var(--fire); text-shadow:0 0 30px rgba(255,69,0,0.6); font-style:normal; }
+    .dl-sub { font-size:0.82rem; font-weight:600; color:var(--muted); letter-spacing:1px; margin-bottom:24px; }
+    .btn-dl-big { display:flex; align-items:center; justify-content:center; gap:12px; width:100%; background:linear-gradient(145deg,var(--fire),#c83400); color:#fff; font-family:'Bebas Neue',sans-serif; font-size:1.9rem; letter-spacing:3px; padding:16px 24px; border-radius:12px; text-decoration:none; border:none; cursor:pointer; box-shadow:0 0 40px rgba(255,69,0,0.5),0 10px 28px rgba(0,0,0,0.55); position:relative; overflow:hidden; transition:transform 0.15s,box-shadow 0.15s; }
+    .btn-dl-big::after { content:''; position:absolute; top:0; left:-120%; width:60%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent); transform:skewX(-20deg); animation:shimmer 3s ease-in-out 1.5s infinite; }
+    .btn-dl-big:active { transform:scale(0.97); }
+    .btn-dl-big i { font-size:1.5rem; }
+    .dl-trust { display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap; margin-top:14px; }
+    .dl-ti { display:flex; align-items:center; gap:5px; font-size:0.75rem; font-weight:600; color:var(--muted2); }
+    .dl-ti i { color:var(--fire); font-size:0.68rem; }
 
-    .section-title span {
-      background: linear-gradient(145deg, #00ff9c, #b0ffc0);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      padding: 0 1rem;
-    }
+    /* TRUST CARDS */
+    .trust-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:44px; }
+    .trust-card { background:var(--ink2); border:1px solid var(--rim); border-radius:14px; padding:16px 14px; position:relative; overflow:hidden; }
+    .trust-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--fire),transparent); }
+    .tc-icon { font-size:1.4rem; margin-bottom:8px; }
+    .tc-icon.gold { color:var(--gold); }
+    .tc-icon.fire { color:var(--fire2); }
+    .tc-icon.blue { color:#60a0ff; }
+    .trust-card h4 { font-family:'Barlow Condensed',sans-serif; font-size:1rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:#fff; margin-bottom:3px; }
+    .trust-card p { font-size:0.78rem; font-weight:500; color:var(--muted2); line-height:1.4; }
 
-    .section-title::before {
-      content: '';
-      position: absolute;
-      bottom: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 80px;
-      height: 4px;
-      background: linear-gradient(90deg, transparent, #00ff9c, #00ff9c, transparent);
-      border-radius: 4px;
-    }
+    /* FOOTER */
+    footer { border-top:1px solid var(--rim); padding:24px 0 20px; text-align:center; }
+    .foot-logo { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:4px; color:var(--fire); text-shadow:0 0 14px rgba(255,69,0,0.4); margin-bottom:6px; }
+    .foot-logo span { color:var(--gold); }
+    .foot-tag { font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:6px; }
+    .foot-copy { font-size:0.72rem; color:var(--muted); }
 
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.8rem;
-      margin: 3rem 0;
-    }
-
-    .feature-card {
-      background: rgba(12, 22, 30, 0.8);
-      backdrop-filter: blur(5px);
-      border: 1px solid rgba(0, 255, 156, 0.1);
-      border-radius: 32px;
-      padding: 2rem 1.5rem;
-      transition: all 0.25s ease;
-      box-shadow: 0 15px 30px -10px rgba(0,0,0,0.6);
-      position: relative;
-      overflow: hidden;
-      z-index: 1;
-    }
-
-    .feature-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 100% 0%, rgba(0,255,156,0.1), transparent 60%);
-      z-index: -1;
-    }
-
-    .feature-card:hover {
-      border-color: #00ff9c;
-      transform: translateY(-6px);
-      box-shadow: 0 25px 40px -8px rgba(0, 255, 156, 0.3);
-    }
-
-    .feature-icon {
-      font-size: 2.6rem;
-      margin-bottom: 1.5rem;
-      background: linear-gradient(45deg, #00ff9c, #aaffbb);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .feature-card h3 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.02em;
-    }
-
-    .feature-card p {
-      color: #adc4d4;
-      font-size: 0.95rem;
-    }
-
-    .badge {
-      background: #00ff9c20;
-      border: 1px solid #00ff9c50;
-      border-radius: 60px;
-      padding: 0.2rem 0.8rem;
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: #00ff9c;
-      margin-left: 0.5rem;
-      vertical-align: middle;
-    }
-
-    /* ===== steps ===== */
-    .steps-wrapper {
-      max-width: 800px;
-      margin: 0 auto;
-      counter-reset: step;
-    }
-
-    .step-item {
-      background: rgba(0, 20, 15, 0.5);
-      backdrop-filter: blur(4px);
-      border-radius: 60px 18px 18px 60px;
-      margin-bottom: 1rem;
-      padding: 1rem 1.5rem 1rem 5rem;
-      border: 1px solid rgba(255,255,255,0.02);
-      border-left: 4px solid #00ff9c;
-      position: relative;
-      transition: 0.2s;
-    }
-
-    .step-item:hover {
-      border-color: #00ff9c;
-      background: rgba(10, 30, 25, 0.7);
-    }
-
-    .step-item::before {
-      counter-increment: step;
-      content: counter(step);
-      position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(145deg, #00ff9c, #00b86e);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 800;
-      font-size: 1.3rem;
-      color: #03050a;
-      box-shadow: 0 0 15px #00ff9c;
-    }
-
-    .step-item h4 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 0.2rem;
-    }
-
-    .step-item p {
-      color: #b0cadf;
-      font-size: 0.9rem;
-    }
-
-    /* ===== download area ===== */
-    .download-block {
-      text-align: center;
-      background: linear-gradient(145deg, #07110e, #010504);
-      border-radius: 80px 80px 40px 40px;
-      padding: 3rem 2rem;
-      margin: 4rem 0 2rem;
-      border: 1px solid #00ff9c30;
-      box-shadow: 0 30px 40px -20px black;
-    }
-
-    .btn-download {
-      display: inline-block;
-      background: linear-gradient(145deg, #00ff9c, #00cc88);
-      color: #03100c;
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 800;
-      font-size: 2.4rem;
-      padding: 1.2rem 3.5rem;
-      border-radius: 80px;
-      text-decoration: none;
-      box-shadow: 0 0 40px #00ff9c;
-      letter-spacing: 2px;
-      transition: all 0.2s;
-      border: 2px solid #aaffcc;
-      margin-bottom: 1.2rem;
-    }
-
-    .btn-download i {
-      margin-right: 10px;
-      font-size: 2rem;
-      color: #03100c;
-    }
-
-    .btn-download:hover {
-      transform: scale(1.04);
-      background: linear-gradient(145deg, #88ffbb, #00ff9c);
-      box-shadow: 0 0 70px #00ff9c;
-    }
-
-    .version-info {
-      color: #6f8b9c;
-      font-size: 0.9rem;
-    }
-
-    .security-note {
-      display: inline-block;
-      background: #131f24;
-      border-radius: 60px;
-      padding: 0.3rem 1.2rem;
-      border: 1px solid #2c4a40;
-      margin-top: 1rem;
-    }
-
-    .security-note i {
-      color: #00ff9c;
-      margin-right: 6px;
-    }
-
-    /* ===== footer ===== */
-    .footer {
-      margin-top: 5rem;
-      padding: 2rem 0 1rem;
-      text-align: center;
-      color: #607482;
-      border-top: 1px solid #1f3430;
-      font-size: 0.9rem;
-    }
-
-    .footer a {
-      color: #9ae6c3;
-      text-decoration: none;
-    }
-
-    /* responsive */
-    @media (max-width: 600px) {
-      .step-item {
-        border-radius: 30px 18px 18px 30px;
-        padding: 1rem 1rem 1rem 4rem;
-      }
-      .step-item::before {
-        width: 32px;
-        height: 32px;
-        left: 0.7rem;
-        font-size: 1rem;
-      }
-      .btn-download {
-        font-size: 1.6rem;
-        padding: 1rem 2rem;
-        width: 100%;
-      }
-      .btn-download i {
-        font-size: 1.5rem;
-      }
-      .logo-pulse {
-        width: 120px;
-        height: 120px;
-      }
-    }
+    /* REVEAL ANIMATION */
+    .reveal { opacity:0; transform:translateY(20px); transition:opacity 0.45s ease, transform 0.45s ease; }
+    .reveal.visible { opacity:1; transform:none; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- header with logo fallback -->
-    <header class="header">
-      <div class="logo-pulse">
-        <!-- real logo (if logo.png missing, show fallback text) -->
-        <picture>
-          <source srcset="logo.png" type="image/png">
-          <img src="logo.png" alt="SHINZO PLAYS" class="logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="logo-fallback" style="display: none;">SP</div>
-        </picture>
-      </div>
-      <h1 class="glitch-title">SHINZO PLAYS</h1>
-      <p class="subhead">where indian warriors clash</p>
-      <div class="tag-line">
-        <i class="fas fa-bolt"></i> 100% real players • Instant room ID • No hackers <i class="fas fa-shield-halved"></i>
-      </div>
-    </header>
 
-    <!-- features premium -->
-    <h2 class="section-title"><span>ELITE FEATURES</span></h2>
-    <div class="features-grid">
-      <div class="feature-card"><div class="feature-icon"><i class="fas fa-user-group"></i></div><h3>Solo / Duo / Squad <span class="badge">any</span></h3><p>Jump in alone or with your crew. Dedicated rooms for every mode.</p></div>
-      <div class="feature-card"><div class="feature-icon"><i class="fas fa-rocket"></i></div><h3>Instant match joining</h3><p>Registration → room ID & password in 5 seconds. Zero wait.</p></div>
-      <div class="feature-card"><div class="feature-icon"><i class="fas fa-wallet"></i></div><h3>Secure wallet</h3><p>Withdraw winnings instantly via UPI, Paytm or bank. 100% safe.</p></div>
-      <div class="feature-card"><div class="feature-icon"><i class="fas fa-user-check"></i></div><h3>Only real players</h3><p>Strict anti-bot system. You play against genuine Free Fire users.</p></div>
-      <div class="feature-card"><div class="feature-icon"><i class="fas fa-key"></i></div><h3>Fast room ID & pwd</h3><p>Auto-delivered inside app. No delays, no spam.</p></div>
-      <div class="feature-card"><div class="feature-icon"><i class="fas fa-shield-halved"></i></div><h3>ZERO HACKERS <span class="badge">refund if any</span></h3><p>Advanced anti-cheat + instant refund if a hacker is spotted.</p></div>
+<div class="bg">
+  <div class="bg-o bg-o1"></div>
+  <div class="bg-o bg-o2"></div>
+  <div class="bg-o bg-o3"></div>
+</div>
+
+<div class="wrap">
+
+  <nav>
+    <div class="nav-logo">SHINZO <em>PLAYS</em></div>
+    <div class="live-pill"><div class="live-dot"></div> Live Now</div>
+  </nav>
+
+  <section class="hero">
+    <div class="logo-wrap">
+      <div class="logo-glow"></div>
+      <div class="logo-ring"></div>
+      <div class="logo-ring2"></div>
+      <div class="logo-core">
+        <img src="logo.png" alt="SHINZO PLAYS" id="logoImg">
+        <span id="logoText">SP</span>
+      </div>
     </div>
 
-    <!-- install steps reimagined -->
-    <h2 class="section-title"><span>➤ INSTALL IN SECONDS</span></h2>
-    <div class="steps-wrapper">
-      <div class="step-item"><h4>Download APK</h4><p>Tap the massive green button below — “DOWNLOAD APK”</p></div>
-      <div class="step-item"><h4>Allow download</h4><p>Grant browser permission to save the file (if asked).</p></div>
-      <div class="step-item"><h4>Open file</h4><p>Go to Downloads folder & tap "SHINZOPLAYS.apk".</p></div>
-      <div class="step-item"><h4>Enable unknown apps</h4><p>If Android blocks, allow “install unknown apps” for your browser.</p></div>
-      <div class="step-item"><h4>Install & Play</h4><p>Open SHINZO PLAYS, login and join any tournament instantly!</p></div>
-    </div>
+    <div class="hero-eyebrow"><i class="fas fa-fire" style="color:var(--fire);font-size:0.6rem;"></i>&nbsp; India's Elite Free Fire Platform</div>
+    <h1 class="hero-h1">Dominate<span class="blaze" data-t="THE ARENA">THE ARENA</span></h1>
+    <p class="hero-sub">Real players. Real money. Zero hackers.<br>Room ID delivered in 5 seconds flat.</p>
 
-    <!-- download CTA + extra trust badges (no stats) -->
-    <div class="download-block">
-      <a href="SHINZOPLAYS.apk" download class="btn-download" id="downloadBtn">
-        <i class="fas fa-download"></i> DOWNLOAD APK
+    <div class="cta-wrap">
+      <a href="SHINZOPLAYS.apk" download class="btn-dl" id="heroDL">
+        <i class="fas fa-download"></i> Download APK
       </a>
-      <p class="version-info"><i class="fas fa-android"></i> version 3.2.1 • 4 MB • updated today</p>
-      <div class="security-note">
-        <i class="fas fa-shield-alt"></i> 100% safe • no virus • original app
+      <div class="dl-info">
+        <span><i class="fas fa-android"></i> Android 5.0+</span>
+        <span><i class="fas fa-weight-hanging"></i> 4 MB</span>
+        <span><i class="fas fa-circle-check"></i> v3.2.1</span>
       </div>
     </div>
+  </section>
 
-    <!-- trust/refund highlight (no numbers, just concepts) -->
-    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; background: #0b181f; border-radius: 48px; padding: 1.8rem; margin-top: 2rem;">
-      <div><i class="fas fa-trophy" style="color: #ffd966;"></i> <span style="font-weight:600;">Weekly winnings</span> <span style="color:#8da9b5;">paid instantly</span></div>
-      <div><i class="fas fa-rotate-left" style="color: #00ff9c;"></i> <span style="font-weight:600;">Instant refund</span> <span style="color:#8da9b5;">if hacker reported</span></div>
-      <div><i class="fas fa-headset" style="color: #b0d0ff;"></i> <span style="font-weight:600;">24/7 support</span> <span style="color:#8da9b5;">via app</span></div>
+  <div class="divider"><div class="div-line"></div><div class="div-txt">What We Offer</div><div class="div-line"></div></div>
+
+  <div class="s-label">Platform Features</div>
+  <div class="s-head">Why <em>Warriors</em><br>Choose Us</div>
+
+  <div class="feat-list">
+    <div class="feat-card reveal">
+      <div class="feat-icon"><i class="fas fa-user-group"></i></div>
+      <div class="feat-body"><h3>Solo / Duo / Squad <span class="badge">All Modes</span></h3><p>Dedicated rooms for every format. Roll alone or bring the whole crew.</p></div>
     </div>
-
-    <!-- footer -->
-    <footer class="footer">
-      <p>© 2026 SHINZO PLAYS — for the Indian Free Fire community.
-      <p style="margin-top:0.5rem;">⚡ no bots, no hackers, only glory ⚡</p>
-    </footer>
+    <div class="feat-card reveal">
+      <div class="feat-icon"><i class="fas fa-rocket"></i></div>
+      <div class="feat-body"><h3>Instant Match Join</h3><p>Register → Room ID + password inside the app in under 5 seconds. Zero wait.</p></div>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon"><i class="fas fa-wallet"></i></div>
+      <div class="feat-body"><h3>Secure Wallet</h3><p>Withdraw winnings instantly via UPI, Paytm, or bank. Fast and fully secure.</p></div>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon"><i class="fas fa-user-check"></i></div>
+      <div class="feat-body"><h3>Real Players Only</h3><p>Strict anti-bot system. Every opponent is a genuine Free Fire player.</p></div>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon"><i class="fas fa-key"></i></div>
+      <div class="feat-body"><h3>Fast Room ID & Password</h3><p>Auto-delivered inside the app. No delays, no spam, no confusion.</p></div>
+    </div>
+    <div class="feat-card reveal">
+      <div class="feat-icon"><i class="fas fa-shield-halved"></i></div>
+      <div class="feat-body"><h3>Zero Hackers <span class="badge">Refund</span></h3><p>Advanced anti-cheat engine. Instant full refund if any hacker is ever detected.</p></div>
+    </div>
   </div>
 
-  <!-- smooth download fallback + logo handler -->
-  <script>
-    (function() {
-      const downloadBtn = document.getElementById('downloadBtn');
-      if (downloadBtn) {
-        downloadBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          const link = document.createElement('a');
-          link.href = 'SHINZOPLAYS.apk';
-          link.download = 'SHINZOPLAYS.apk';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        });
-      }
+  <div class="divider"><div class="div-line"></div><div class="div-txt">How To Install</div><div class="div-line"></div></div>
 
-      const img = document.querySelector('.logo');
-      const fallback = document.querySelector('.logo-fallback');
-      if (img && fallback) {
-        img.onerror = function() {
-          img.style.display = 'none';
-          fallback.style.display = 'flex';
-        };
-        img.onload = function() {
-          fallback.style.display = 'none';
-        };
-      }
-    })();
-  </script>
-</body>
-</html>
+  <div class="s-label">Quick Setup</div>
+  <div class="s-head">Up in <em>60 Sec</em></div>
+
+  <div class="steps-panel reveal">
+    <div class="step-row">
+      <div class="step-n">1</div>
+      <div class="step-body"><h4>Download APK</h4><p>Hit the big orange "Download APK" button on this page.</p></div>
+    </div>
+    <div class="step-row">
+      <div class="step-n">2</div>
+      <div class="step-body"><h4>Allow Download</h4><p>Grant your browser permission to save the file when prompted.</p></div>
+    </div>
+    <div class="step-row">
+      <div class="step-n">3</div>
+      <div class="step-body"><h4>Open the File</h4><p>Go to your Downloads folder and tap SHINZOPLAYS.apk.</p></div>
+    </div>
+    <div class="step-row">
+      <div class="step-n">4</div>
+      <div class="step-body"><h4>Enable Unknown Apps</h4><p>If Android blocks it, allow unknown sources for your browser in settings.</p></div>
+    </div>
+    <div class="step-row">
+      <div class="step-n">5</div>
+      <div class="step-body"><h4>Install & Dominate</h4><p>Open SHINZO PLAYS, log in, and jump into any tournament instantly.</p></div>
+    </div>
+  </div>
+
+  <div class="dl-block reveal">
+    <div class="dl-eyebrow">Ready to fight?</div>
+    <div class="dl-title">GET THE<em>APP</em></div>
+    <div class="dl-sub">Free • Android 5.0+ • 4 MB</div>
+    <a href="SHINZOPLAYS.apk" download class="btn-dl-big" id="mainDL">
+      <i class="fas fa-download"></i> DOWNLOAD APK
+    </a>
+    <div class="dl-trust">
+      <div class="dl-ti"><i class="fas fa-shield-alt"></
