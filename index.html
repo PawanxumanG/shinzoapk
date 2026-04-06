@@ -13,7 +13,7 @@
 :root {
   /* DARK THEME (Default) */
   --bg-color: #080508;
-  --text-main: #fff;
+  --text-main: #ffffff;
   --text-muted: #b09090;
   --text-meta: #7a6060;
   
@@ -32,31 +32,45 @@
 
   --logo-core-bg: radial-gradient(circle at 35% 35%, #1c1018, #080508 75%);
   --logo-shadow-inner: inset 0 0 18px rgba(255, 69, 0, 0.07);
+
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.8);
+  --btn-shadow: 0 8px 24px rgba(255, 69, 0, 0.4);
 }
+
+
 
 [data-theme="light"] {
   /* LIGHT THEME */
-  --bg-color: #f7f9fa;
-  --text-main: #14171a;
-  --text-muted: #657786;
-  --text-meta: #aab8c2;
+  --bg-color: #f0f2f5;
+  --text-main: #1c1c1e;
+  --text-muted: #4a4a4d;
+  --text-meta: #7c7c82;
   
-  --accent-primary: #ff4500;
-  --accent-secondary: #ff9d00;
-  --accent-glow: rgba(255, 69, 0, 0.3);
-  --secondary-glow: rgba(255, 157, 0, 0.3);
+  --accent-primary: #e63900;
+  --accent-secondary: #f08c00;
+  --accent-glow: rgba(230, 57, 0, 0.15);
+  --secondary-glow: rgba(240, 140, 0, 0.15);
   
-  --card-bg: rgba(255, 255, 255, 0.8);
-  --card-border: rgba(0, 0, 0, 0.08);
-  --dl-bg: rgba(255, 255, 255, 0.9);
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --card-border: rgba(0, 0, 0, 0.06);
+  --dl-bg: rgba(255, 255, 255, 1);
   
   --nav-border: rgba(0, 0, 0, 0.05);
-  --orb1-bg: rgba(255, 69, 0, 0.07);
-  --orb2-bg: rgba(255, 157, 0, 0.05);
+  --orb1-bg: rgba(230, 57, 0, 0.05);
+  --orb2-bg: rgba(240, 140, 0, 0.04);
 
-  --logo-core-bg: radial-gradient(circle at 35% 35%, #fff, #f0f0f0 75%);
+  --logo-core-bg: radial-gradient(circle at 35% 35%, #ffffff, #f0f0f0 75%);
   --logo-shadow-inner: inset 0 0 18px rgba(0, 0, 0, 0.03);
+
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.09);
+  --btn-shadow: 0 8px 18px rgba(230, 57, 0, 0.25);
 }
+
+
 
 body {
   background: var(--bg-color);
@@ -115,7 +129,7 @@ body {
   padding-right: 18px;
 }
 [data-theme="dark"] .nav { background: rgba(8, 5, 8, 0.6); }
-[data-theme="light"] .nav { background: rgba(247, 249, 250, 0.6); }
+[data-theme="light"] .nav { background: rgba(240, 242, 245, 0.75); }
 
 .nav-brand {
   font-family: 'Bebas Neue', sans-serif;
@@ -446,7 +460,7 @@ body {
 .feat:hover {
   transform: translateY(-4px);
   border-color: var(--accent-glow);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-md);
 }
 
 .feat::before {
@@ -710,7 +724,7 @@ body {
 }
 .trust-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-md);
 }
 
 .trust-card::before {
@@ -786,6 +800,176 @@ footer {
 }
 .rv.show { opacity: 1; transform: none; }
 
+
+/* ── CANVAS PARTICLES ── */
+#particles-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── TEXT GRADIENTS ── */
+.hero-h1, .sec-h {
+  background: linear-gradient(to right, var(--text-main) 0%, var(--accent-secondary) 50%, var(--accent-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  background-size: 200% auto;
+  animation: shine-text 8s linear infinite;
+  display: inline-block;
+}
+@keyframes shine-text {
+  to { background-position: 200% center; }
+}
+
+/* Fix inner spans to not lose their styles if they had text-shadows, though gradients might override them.
+   Let's keep the fire color strong. */
+.hero-h1 .fire {
+  -webkit-text-fill-color: var(--accent-primary);
+}
+.sec-h span {
+  -webkit-text-fill-color: var(--accent-secondary);
+}
+
+/* ── RIPPPLE EFFECT ── */
+.btn-dl, .btn-dl-big {
+  position: relative;
+  overflow: hidden;
+}
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple-anim 0.6s linear forwards;
+  background: rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+}
+@keyframes ripple-anim {
+  to { transform: scale(4); opacity: 0; }
+}
+
+
+/* ── LIGHT MODE OVERRIDES ── */
+[data-theme="light"] .hero-h1, 
+[data-theme="light"] .sec-h {
+  background: linear-gradient(to right, #ba000d 0%, #ff6600 50%, #ba000d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  background-size: 200% auto;
+}
+[data-theme="light"] .hero-h1 .fire {
+  -webkit-text-fill-color: #ba000d;
+}
+[data-theme="light"] .sec-h span {
+  -webkit-text-fill-color: #e63900;
+}
+[data-theme="light"] .feat, 
+[data-theme="light"] .trust-card, 
+[data-theme="light"] .steps-box, 
+[data-theme="light"] .dl-block {
+  box-shadow: var(--shadow-sm);
+}
+[data-theme="light"] .feat:hover, 
+[data-theme="light"] .trust-card:hover {
+  box-shadow: var(--shadow-md);
+}
+[data-theme="light"] .btn-dl, 
+[data-theme="light"] .btn-dl-big {
+  box-shadow: 0 4px 15px var(--accent-glow), var(--btn-shadow);
+}
+[data-theme="light"] .btn-dl:hover, 
+[data-theme="light"] .btn-dl-big:hover {
+  box-shadow: 0 6px 20px var(--accent-glow), var(--shadow-md);
+}
+
+
+/* ── VIDEO PROMO ── */
+.video-promo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 16px 18px;
+  margin-bottom: 24px;
+  margin-top: 10px;
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.video-promo::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 4px;
+  background: #ff0000;
+  border-radius: 4px 0 0 4px;
+}
+.video-promo:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+.promo-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.promo-icon {
+  font-size: 2rem;
+  color: #ff0000;
+  filter: drop-shadow(0 0 8px rgba(255,0,0,0.4));
+}
+.promo-txt h4 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.15rem;
+  letter-spacing: 1px;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+.promo-txt p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.btn-yt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 0, 0, 0.1);
+  color: #ff0000;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  transition: background 0.3s, color 0.3s, transform 0.2s;
+  flex-shrink: 0;
+}
+.btn-yt:hover {
+  background: #ff0000;
+  color: #fff;
+  transform: scale(1.05);
+}
+.btn-yt:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 400px) {
+  .video-promo { flex-direction: column; align-items: stretch; gap: 15px; text-align: center;}
+  .promo-content { flex-direction: column; gap: 8px; }
+  .btn-yt { justify-content: center; }
+}
+
 </style>
 <script>
 var currentTheme = localStorage.getItem('theme');
@@ -797,6 +981,8 @@ if (currentTheme) {
 </script>
 </head>
 <body>
+
+<canvas id="particles-canvas"></canvas>
 
 <div class="orb1"></div>
 <div class="orb2"></div>
@@ -928,6 +1114,19 @@ if (currentTheme) {
 
   <div class="sec-tag">Quick Setup</div>
   <div class="sec-h">Up In <span>60 Sec</span></div>
+
+  <!-- YT PROMO -->
+  <div class="video-promo rv">
+    <div class="promo-content">
+      <div class="promo-icon"><i class="fab fa-youtube"></i></div>
+      <div class="promo-txt">
+        <h4>Need Help?</h4>
+        <p>Watch our official YouTube setup guide.</p>
+      </div>
+    </div>
+    <a href="https://youtu.be/m1RBxK_FYiQ?si=n10DNptb3pAjJmIE" target="_blank" class="btn-yt">Watch <i class="fas fa-play"></i></a>
+  </div>
+
 
   <div class="steps-box rv">
     <div class="step">
@@ -1061,21 +1260,100 @@ if (currentTheme) {
   document.getElementById('btn1').addEventListener('click', triggerDownload);
   document.getElementById('btn2').addEventListener('click', triggerDownload);
 
-  // scroll reveal
+  
+  // ── RIPPLE EFFECT ──
+  document.querySelectorAll('.btn-dl, .btn-dl-big').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      if(e.clientX === 0 && e.clientY === 0) return; // Ignore non-mouse triggers
+      var rect = btn.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      var ripple = document.createElement('span');
+      ripple.classList.add('ripple');
+      var size = Math.max(rect.width, rect.height);
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (x - size/2) + 'px';
+      ripple.style.top = (y - size/2) + 'px';
+      btn.appendChild(ripple);
+      setTimeout(function() { ripple.remove(); }, 600);
+    });
+  });
+
+  // ── CANVAS PARTICLES ──
+  var canvas = document.getElementById('particles-canvas');
+  if(canvas) {
+    var ctx = canvas.getContext('2d');
+    var particles = [];
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    function createParticle() {
+      return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height, /* Initial spread out */
+        size: Math.random() * 2.5 + 0.5,
+        speed: Math.random() * 1.5 + 0.5,
+        opacity: Math.random() * 0.6 + 0.1,
+        wobble: Math.random() * Math.PI * 2,
+        wobbleSpeed: Math.random() * 0.03 + 0.01
+      };
+    }
+    for (var i=0; i<50; i++) particles.push(createParticle());
+    
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      
+      particles.forEach(function(p) {
+        p.y -= p.speed;
+        p.wobble += p.wobbleSpeed;
+        p.x += Math.sin(p.wobble) * 0.5;
+        if (p.y < -10) {
+          p.y = canvas.height + 10;
+          p.x = Math.random() * canvas.width;
+        }
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = isLight ? `rgba(230, 57, 0, ${p.opacity * 0.35})` : `rgba(255, 69, 0, ${p.opacity})`;
+        ctx.fill();
+        ctx.shadowBlur = isLight ? 0 : 5;
+        ctx.shadowColor = isLight ? 'transparent' : '#ff4500';
+      });
+      requestAnimationFrame(drawParticles);
+    }
+    drawParticles();
+  }
+
+  // ── IMPROVED SCROLL REVEAL (Batch Staggering) ──
   var els = document.querySelectorAll('.rv');
   if ('IntersectionObserver' in window) {
+    var staggerTimer;
+    var intersectingEls = [];
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          entry.target.classList.add('show');
+          intersectingEls.push(entry.target);
           io.unobserve(entry.target);
         }
       });
+      // Sort vertically to reveal top-to-bottom sequentially
+      intersectingEls.sort(function(a, b) {
+        return a.getBoundingClientRect().top - b.getBoundingClientRect().top;
+      });
+      clearTimeout(staggerTimer);
+      staggerTimer = setTimeout(function() {
+        intersectingEls.forEach(function(el, i) {
+          el.style.transitionDelay = (i * 0.08) + 's';
+          setTimeout(function() { el.classList.add('show'); }, 20); // trigger after styles apply
+        });
+        intersectingEls = []; // clear batch
+      }, 50);
     }, { threshold: 0.08 });
-    els.forEach(function (el, i) {
-      el.style.transitionDelay = (i * 0.055) + 's';
-      io.observe(el);
-    });
+    els.forEach(function (el) { io.observe(el); el.style.transitionDelay = '0s'; }); /* reset any existing inline delays */
   } else {
     els.forEach(function (el) { el.classList.add('show'); });
   }
