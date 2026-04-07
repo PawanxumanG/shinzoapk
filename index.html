@@ -89,7 +89,15 @@
     }
 
     /* Smooth theme transitions (Optimized to prevent lag during ripples) */
-    body, .feat, .nav, .trust-card, .btn-dl, .btn-dl-big, .steps-box, .dl-block, .video-promo {
+    body,
+    .feat,
+    .nav,
+    .trust-card,
+    .btn-dl,
+    .btn-dl-big,
+    .steps-box,
+    .dl-block,
+    .video-promo {
       transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
     }
 
@@ -1165,25 +1173,98 @@
       }
     }
 
-    /* Theme Toggle Ripple Animation */
-    .theme-ripple {
-      position: fixed;
-      border-radius: 50%;
-      background: var(--accent-primary);
-      pointer-events: none;
-      z-index: 9999;
-      width: 20px;
-      height: 20px;
-      transform: translate(-50%, -50%) scale(0);
-      opacity: 0.9;
-      will-change: transform, opacity;
-      animation: theme-ripple-anim 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    /* ── APP SHOWCASE ── */
+    .showcase-sec {
+      padding: 20px 0 44px;
+      margin-left: -18px;
+      margin-right: -18px;
+      overflow: hidden;
     }
 
-    @keyframes theme-ripple-anim {
-      0% { transform: translate(-50%, -50%) scale(0); opacity: 0.9; }
-      40% { opacity: 1; }
-      100% { transform: translate(-50%, -50%) scale(200); opacity: 0; }
+    .showcase-header {
+      padding: 0 18px;
+      margin-bottom: 24px;
+    }
+
+    .showcase-slider {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding: 10px 18px 30px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      /* Hide for Firefox */
+      -ms-overflow-style: none;
+      /* Hide for IE/Edge */
+    }
+
+    .showcase-slider::-webkit-scrollbar {
+      display: none;
+      /* Hide for Chrome/Safari */
+    }
+
+    .screen-card {
+      flex: 0 0 240px;
+      scroll-snap-align: center;
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-md);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+    }
+
+    .screen-card:hover {
+      transform: scale(1.03) translateY(-5px);
+      border-color: var(--accent-primary);
+      box-shadow: 0 15px 35px var(--accent-glow);
+    }
+
+    .screen-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 18px;
+    }
+
+    .screen-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+      padding: 15px 12px 10px;
+      color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .screen-card:hover .screen-label {
+      opacity: 1;
+    }
+
+    /* Screen Specific Accent Colors */
+    .card-arena {
+      border-color: rgba(255, 184, 48, 0.3);
+    }
+
+    .card-ai {
+      border-color: rgba(168, 85, 247, 0.3);
+    }
+
+    .card-wallet {
+      border-color: rgba(34, 197, 94, 0.3);
+    }
+
+    @media (max-width: 480px) {
+      .screen-card {
+        flex: 0 0 210px;
+      }
     }
   </style>
   <script>
@@ -1320,6 +1401,58 @@
       </div>
 
     </div>
+
+    <!-- APP SHOWCASE -->
+    <div class="divider">
+      <div class="div-line"></div>
+      <div class="div-label">Inside the Verse</div>
+      <div class="div-line"></div>
+    </div>
+
+    <section class="showcase-sec rv">
+      <div class="showcase-header">
+        <div class="sec-tag">Modern Interface</div>
+        <div class="sec-h">Pro <span>Gaming</span><br>Experience</div>
+      </div>
+
+      <div class="showcase-slider">
+        <!-- ARENA -->
+        <div class="screen-card card-arena">
+          <img src="assets/screenshots/arena.jpg?v=3" alt="Arena Screen">
+          <div class="screen-label">Live Arena</div>
+        </div>
+
+        <!-- WALLET -->
+        <div class="screen-card card-wallet">
+          <img src="assets/screenshots/wallet.jpg?v=3" alt="Wallet Screen">
+          <div class="screen-label">Instant Payouts</div>
+        </div>
+
+        <!-- AI CHAT -->
+        <div class="screen-card card-ai">
+          <img src="assets/screenshots/aichat.jpg?v=3" alt="Shinzo AI Chat">
+          <div class="screen-label">AI Assistant</div>
+        </div>
+
+        <!-- WORLD CHAT -->
+        <div class="screen-card">
+          <img src="assets/screenshots/worldchat.jpg?v=3" alt="World Chat Screen">
+          <div class="screen-label">World Chat</div>
+        </div>
+
+        <!-- RULES -->
+        <div class="screen-card">
+          <img src="assets/screenshots/rules.jpg?v=3" alt="Rules Screen">
+          <div class="screen-label">Fair Play</div>
+        </div>
+
+        <!-- PROFILE -->
+        <div class="screen-card">
+          <img src="assets/screenshots/profile.jpg?v=3" alt="Profile Screen">
+          <div class="screen-label">Gaming Profile</div>
+        </div>
+      </div>
+    </section>
 
     <!-- INSTALL STEPS -->
     <div class="divider">
@@ -1461,24 +1594,24 @@
       themeToggle.addEventListener('click', function (e) {
         if (isThemeTransitioning) return;
         isThemeTransitioning = true;
-        
+
         var x = e.clientX || window.innerWidth - 50;
         var y = e.clientY || 50;
-        
+
         var ripple = document.createElement('div');
         ripple.classList.add('theme-ripple');
         ripple.style.left = x + 'px';
         ripple.style.top = y + 'px';
         document.body.appendChild(ripple);
 
-        setTimeout(function() {
+        setTimeout(function () {
           var theme = document.documentElement.getAttribute('data-theme');
           var targetTheme = theme === 'light' ? 'dark' : 'light';
           document.documentElement.setAttribute('data-theme', targetTheme);
           localStorage.setItem('theme', targetTheme);
         }, 300);
 
-        setTimeout(function() {
+        setTimeout(function () {
           ripple.remove();
           isThemeTransitioning = false;
         }, 750);
