@@ -88,9 +88,9 @@
       transition: background 0.4s ease, color 0.4s ease;
     }
 
-    /* Smooth theme transitions */
-    * {
-      transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, text-shadow 0.4s ease;
+    /* Smooth theme transitions (Optimized to prevent lag during ripples) */
+    body, .feat, .nav, .trust-card, .btn-dl, .btn-dl-big, .steps-box, .dl-block, .video-promo {
+      transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
     }
 
     /* ── GLOW ORBS ── */
@@ -1176,7 +1176,8 @@
       height: 20px;
       transform: translate(-50%, -50%) scale(0);
       opacity: 0.9;
-      animation: theme-ripple-anim 0.8s ease-in-out forwards;
+      will-change: transform, opacity;
+      animation: theme-ripple-anim 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
 
     @keyframes theme-ripple-anim {
@@ -1456,7 +1457,11 @@
         document.documentElement.setAttribute('data-theme', 'dark'); // default
       }
 
+      var isThemeTransitioning = false;
       themeToggle.addEventListener('click', function (e) {
+        if (isThemeTransitioning) return;
+        isThemeTransitioning = true;
+        
         var x = e.clientX || window.innerWidth - 50;
         var y = e.clientY || 50;
         
@@ -1475,7 +1480,8 @@
 
         setTimeout(function() {
           ripple.remove();
-        }, 800);
+          isThemeTransitioning = false;
+        }, 750);
       });
 
       // download handler
