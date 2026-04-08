@@ -98,7 +98,8 @@
     .steps-box,
     .dl-block,
     .video-promo {
-      transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+      transition: background-color 0.4s ease, color 0.4s ease;
+      will-change: background-color, color;
     }
 
     /* ── GLOW ORBS ── */
@@ -1025,6 +1026,30 @@
       }
     }
 
+    .theme-ripple {
+      position: fixed;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      z-index: 999999;
+      pointer-events: none;
+      transform: scale(0);
+      animation: theme-ripple-animation 0.75s ease-out forwards;
+    }
+
+    @keyframes theme-ripple-animation {
+      0% {
+        transform: scale(0);
+        opacity: 0.5;
+      }
+
+      100% {
+        transform: scale(2500);
+        opacity: 0;
+      }
+    }
+
 
     /* ── LIGHT MODE OVERRIDES ── */
     [data-theme="light"] .hero-h1,
@@ -1191,7 +1216,6 @@
       gap: 20px;
       overflow-x: auto;
       padding: 10px 18px 30px;
-      scroll-snap-type: x mandatory;
       scrollbar-width: none;
       /* Hide for Firefox */
       -ms-overflow-style: none;
@@ -1721,6 +1745,59 @@
       } else {
         els.forEach(function (el) { el.classList.add('show'); });
       }
+      // ── SCREENSHOT SEAMLESS CONTINUOUS LOOP ──
+      var slider = document.querySelector('.showcase-slider');
+      if (slider) {
+        // Clone for seamless loop (only if not already cloned)
+        if (slider.children.length < 10) {
+          slider.innerHTML += slider.innerHTML;
+        }
+
+        var scrollPos = 0;
+        var isPaused = false;
+        var speed = 0.2; // Ultra-slow speed
+        var resumeTimer = null;
+
+        function animate() {
+          if (isPaused) return;
+          scrollPos += speed;
+
+          // When we reach half the scrollWidth (the original content width), reset
+          if (scrollPos >= slider.scrollWidth / 2) {
+            scrollPos = 0;
+          }
+
+          slider.scrollLeft = scrollPos;
+          requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
+
+        function handlePause() {
+          isPaused = true;
+          clearTimeout(resumeTimer);
+        }
+
+        function handleResume() {
+          clearTimeout(resumeTimer);
+          resumeTimer = setTimeout(function () {
+            // Sync position with where user scrolled manually
+            scrollPos = slider.scrollLeft;
+            isPaused = false;
+            animate();
+          }, 10000); // 10 sec delay
+        }
+
+        // Pause while interacting
+        slider.addEventListener('mousedown', handlePause);
+        slider.addEventListener('touchstart', handlePause);
+
+        // Resume after interaction ends
+        slider.addEventListener('mouseup', handleResume);
+        slider.addEventListener('touchend', handleResume);
+        slider.addEventListener('mouseleave', handleResume);
+      }
+
     }());
   </script>
 
