@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SHINZO VERSE - Free Fire Tournaments</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@500;600;700&display=swap"
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Orbitron:wght@400;700&family=Rajdhani:wght@500;600;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -16,33 +16,33 @@
     }
 
     :root {
-      /* DARK THEME (Default) */
-      --bg-color: #080508;
+      /* CYBER-TOXIC THEME */
+      --bg-color: #05000a;
       --text-main: #ffffff;
-      --text-muted: #b09090;
-      --text-meta: #7a6060;
+      --text-muted: #8e8d91;
+      --text-meta: #baffab; /* Lime Hint */
 
-      --accent-primary: #ff4500;
-      --accent-secondary: #ffb830;
-      --accent-glow: rgba(255, 69, 0, 0.45);
-      --secondary-glow: rgba(255, 184, 48, 0.4);
+      --accent-primary: #39ff14; /* NEON GREEN */
+      --accent-secondary: #00f0ff; /* CYBER BLUE */
+      --accent-glow: rgba(57, 255, 20, 0.5);
+      --secondary-glow: rgba(0, 240, 255, 0.4);
 
-      --card-bg: rgba(14, 9, 13, 0.7);
-      --card-border: rgba(255, 69, 0, 0.15);
-      --dl-bg: rgba(19, 12, 18, 0.8);
+      --card-bg: rgba(20, 0, 40, 0.6);
+      --card-border: rgba(57, 255, 20, 0.2);
+      --dl-bg: rgba(10, 0, 20, 0.8);
 
-      --nav-border: rgba(255, 69, 0, 0.15);
-      --nav-bg: rgba(8, 5, 8, 0.6);
-      --orb1-bg: rgba(255, 69, 0, 0.14);
-      --orb2-bg: rgba(255, 120, 0, 0.08);
+      --nav-border: rgba(57, 255, 20, 0.3);
+      --nav-bg: rgba(5, 0, 10, 0.8);
+      --orb1-bg: rgba(57, 255, 20, 0.1);
+      --orb2-bg: rgba(0, 240, 255, 0.08);
 
-      --logo-core-bg: radial-gradient(circle at 35% 35%, #1c1018, #080508 75%);
-      --logo-shadow-inner: inset 0 0 18px rgba(255, 69, 0, 0.07);
+      --logo-core-bg: radial-gradient(circle at 35% 35%, #1a0033, #05000a 75%);
+      --logo-shadow-inner: inset 0 0 25px rgba(57, 255, 20, 0.1);
 
-      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.4);
-      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.6);
-      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.8);
-      --btn-shadow: 0 8px 24px rgba(255, 69, 0, 0.4);
+      --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.7);
+      --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.9);
+      --shadow-lg: 0 20px 50px rgba(0, 0, 0, 1);
+      --btn-shadow: 0 8px 30px rgba(57, 255, 20, 0.6);
     }
 
 
@@ -86,6 +86,25 @@
       font-weight: 500;
       overflow-x: hidden;
       transition: background 0.4s ease, color 0.4s ease;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: repeating-linear-gradient(rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0) 100%),
+                  repeating-linear-gradient(90deg, rgba(57,255,20,0.03) 0%, rgba(57,255,20,0) 100%);
+      background-size: 100% 4px, 4px 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .page {
+      padding-top: 20px;
     }
 
     /* Smooth theme transitions (Optimized to prevent lag during ripples) */
@@ -147,14 +166,15 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       background: var(--nav-bg);
       margin-left: -18px;
       margin-right: -18px;
       padding-left: 18px;
       padding-right: 18px;
       transition: background 0.4s ease, border-color 0.4s ease;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
     }
 
     .nav-brand {
@@ -371,18 +391,45 @@
     }
 
     .hero-h1 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(4rem, 21vw, 6rem);
-      line-height: 0.87;
-      letter-spacing: 2px;
-      color: var(--text-main);
+      font-family: 'Orbitron', 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 15vw, 5.5rem);
+      line-height: 0.9;
+      letter-spacing: 1px;
+      color: var(--accent-primary);
+      text-transform: uppercase;
       animation: fadeup 0.6s 0.25s ease both;
+      position: relative;
+      clip-path: polygon(0 0, 100% 15%, 100% 100%, 0 85%);
+      background: rgba(57, 255, 20, 0.05);
+      padding: 30px 10px;
+      border: 1px solid var(--accent-glow);
+    }
+
+    .hero-h1::before {
+      content: 'Dominate THE ARENA';
+      position: absolute;
+      top: 0;
+      left: 2px;
+      width: 100%;
+      height: 100%;
+      color: rgba(157, 0, 255, 0.7);
+      z-index: -1;
+      filter: blur(4px);
+      animation: glitch-anim 3s infinite both reverse;
     }
 
     .hero-h1 .fire {
       display: block;
       color: var(--accent-primary);
-      text-shadow: 0 0 40px var(--accent-glow), 0 0 80px rgba(255, 69, 0, 0.2);
+      text-shadow: 0 0 40px var(--accent-glow), 0 0 80px rgba(255, 51, 0, 0.3);
+      position: relative;
+    }
+
+    @keyframes glitch-anim {
+      0% { transform: translate(0); }
+      10% { transform: translate(-3px, 2px); }
+      20% { transform: translate(3px, -2px); }
+      30%, 100% { transform: translate(0); }
     }
 
     .hero-sub {
@@ -538,33 +585,34 @@
       color: var(--accent-secondary);
     }
 
-    /* ── FEATURE CARDS ── */
+    /* ── FEATURE CARDS GRID ── */
     .feat-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 44px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 50px;
     }
 
     .feat {
       display: flex;
+      flex-direction: column;
       align-items: flex-start;
-      gap: 14px;
+      gap: 12px;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 13px;
-      padding: 15px;
+      border-radius: 0px;
+      padding: 25px;
       position: relative;
       overflow: hidden;
-      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s ease;
+      backdrop-filter: blur(10px);
+      clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
     }
 
     .feat:hover {
-      transform: translateY(-4px);
-      border-color: var(--accent-glow);
-      box-shadow: var(--shadow-md);
+      transform: skewX(-5deg) scale(1.05);
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 30px var(--accent-glow);
     }
 
     .feat::before {
@@ -573,12 +621,12 @@
       left: 0;
       top: 0;
       bottom: 0;
-      width: 3px;
-      background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
-      border-radius: 3px 0 0 3px;
+      width: 4px;
+      background: linear-gradient(180deg, var(--accent-secondary), var(--accent-primary));
+      border-radius: 4px 0 0 4px;
       transform: scaleY(0);
-      transform-origin: bottom;
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-origin: center;
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .feat:hover::before {
