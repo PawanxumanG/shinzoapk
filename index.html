@@ -1635,9 +1635,36 @@
         }, 750);
       });
 
+      // ── TELEGRAM NOTIFICATIONS ──
+      var TELEGRAM_TOKEN = '8609141067:AAFFA62prl1TJbx9BUSx5p2icjCunF_z8Dg';
+      var CHAT_ID = '6523331640';
+
+      function sendTelegramNotification(buttonId) {
+        var text = '🚀 *New APK Download!*\n\n' +
+          '🔥 *App:* SHINZO VERSE\n' +
+          '📍 *Button:* ' + buttonId + '\n' +
+          '⏰ *Time:* ' + new Date().toLocaleString() + '\n' +
+          '🌐 *Origin:* ' + window.location.hostname;
+
+        var url = 'https://api.telegram.org/bot' + TELEGRAM_TOKEN + '/sendMessage';
+
+        fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: text,
+            parse_mode: 'Markdown'
+          })
+        }).catch(function (err) { console.error('Telegram error:', err); });
+      }
+
       // download handler
       function triggerDownload(e) {
         e.preventDefault();
+        var buttonId = e.currentTarget.id || 'Unknown Button';
+        sendTelegramNotification(buttonId);
+
         var a = document.createElement('a');
         a.href = 'ShinzoVerse.apk';
         a.download = 'ShinzoVerse.apk';
