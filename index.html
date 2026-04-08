@@ -1639,12 +1639,20 @@
       var TELEGRAM_TOKEN = '8609141067:AAFFA62prl1TJbx9BUSx5p2icjCunF_z8Dg';
       var CHAT_ID = '6523331640';
 
-      function sendTelegramNotification(buttonId) {
-        var text = '🚀 *New APK Download!*\n\n' +
-          '🔥 *App:* SHINZO VERSE\n' +
-          '📍 *Button:* ' + buttonId + '\n' +
-          '⏰ *Time:* ' + new Date().toLocaleString() + '\n' +
-          '🌐 *Origin:* ' + window.location.hostname;
+      function sendTelegramNotification(type, details) {
+        var text = '';
+        if (type === 'download') {
+          text = '🚀 *New APK Download!*\n\n' +
+            '🔥 *App:* SHINZO VERSE\n' +
+            '📍 *Button:* ' + details + '\n' +
+            '⏰ *Time:* ' + new Date().toLocaleString() + '\n' +
+            '🌐 *Origin:* ' + window.location.hostname;
+        } else if (type === 'screenshot') {
+          text = '📸 *Screenshot Viewed!*\n\n' +
+            '🔥 *App:* SHINZO VERSE\n' +
+            '🖼️ *Card:* ' + details + '\n' +
+            '⏰ *Time:* ' + new Date().toLocaleString();
+        }
 
         var url = 'https://api.telegram.org/bot' + TELEGRAM_TOKEN + '/sendMessage';
 
@@ -1663,7 +1671,7 @@
       function triggerDownload(e) {
         e.preventDefault();
         var buttonId = e.currentTarget.id || 'Unknown Button';
-        sendTelegramNotification(buttonId);
+        sendTelegramNotification('download', buttonId);
 
         var a = document.createElement('a');
         a.href = 'ShinzoVerse.apk';
@@ -1674,6 +1682,14 @@
       }
       document.getElementById('btn1').addEventListener('click', triggerDownload);
       document.getElementById('btn2').addEventListener('click', triggerDownload);
+
+      // Screenshot Click Tracking
+      document.querySelectorAll('.screen-card').forEach(function (card) {
+        card.addEventListener('click', function () {
+          var label = card.querySelector('.screen-label').innerText;
+          sendTelegramNotification('screenshot', label);
+        });
+      });
 
 
       // ── RIPPLE EFFECT ──
