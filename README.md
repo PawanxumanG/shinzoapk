@@ -1,2 +1,2 @@
 # shinzoapk
-Free Fire Tournament Platform - SHINZO PLAYS APK"
+Free Fire Tournament Platform - SHINZO VERSE APK"
