@@ -98,8 +98,7 @@
     .steps-box,
     .dl-block,
     .video-promo {
-      transition: background-color 0.4s ease, color 0.4s ease;
-      will-change: background-color, color;
+      transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
     }
 
     /* ── GLOW ORBS ── */
@@ -994,7 +993,7 @@
     }
 
     /* Fix inner spans to not lose their styles if they had text-shadows, though gradients might override them.
-  Let's keep the fire color strong. */
+   Let's keep the fire color strong. */
     .hero-h1 .fire {
       -webkit-text-fill-color: var(--accent-primary);
     }
@@ -1022,30 +1021,6 @@
     @keyframes ripple-anim {
       to {
         transform: scale(4);
-        opacity: 0;
-      }
-    }
-
-    .theme-ripple {
-      position: fixed;
-      width: 2px;
-      height: 2px;
-      border-radius: 50%;
-      background: var(--accent-primary);
-      z-index: 999999;
-      pointer-events: none;
-      transform: scale(0);
-      animation: theme-ripple-animation 0.75s ease-out forwards;
-    }
-
-    @keyframes theme-ripple-animation {
-      0% {
-        transform: scale(0);
-        opacity: 0.5;
-      }
-
-      100% {
-        transform: scale(2500);
         opacity: 0;
       }
     }
@@ -1216,6 +1191,7 @@
       gap: 20px;
       overflow-x: auto;
       padding: 10px 18px 30px;
+      scroll-snap-type: x mandatory;
       scrollbar-width: none;
       /* Hide for Firefox */
       -ms-overflow-style: none;
@@ -1326,7 +1302,7 @@
     </nav>
 
     <!-- HERO -->
-    <section class="hero" id="hero-section">
+    <section class="hero">
 
       <div class="logo-wrap">
         <div class="logo-glow"></div>
@@ -1374,7 +1350,7 @@
     <div class="sec-tag">Platform Features</div>
     <div class="sec-h">Why <span>Warriors</span><br>Choose Us</div>
 
-    <div class="feat-list" id="features-section">
+    <div class="feat-list">
 
       <div class="feat rv">
         <div class="feat-ico"><i class="fas fa-user-group"></i></div>
@@ -1433,7 +1409,7 @@
       <div class="div-line"></div>
     </div>
 
-    <section class="showcase-sec rv" id="showcase-section">
+    <section class="showcase-sec rv">
       <div class="showcase-header">
         <div class="sec-tag">Modern Interface</div>
         <div class="sec-h">Pro <span>Gaming</span><br>Experience</div>
@@ -1496,7 +1472,7 @@
     </div>
 
 
-    <div class="steps-box rv" id="steps-section">
+    <div class="steps-box rv">
       <div class="step">
         <div class="step-num">1</div>
         <div class="step-body">
@@ -1627,10 +1603,6 @@
           var targetTheme = theme === 'light' ? 'dark' : 'light';
           document.documentElement.setAttribute('data-theme', targetTheme);
           localStorage.setItem('theme', targetTheme);
-
-          // Theme toggle notification
-          var themeName = targetTheme.charAt(0).toUpperCase() + targetTheme.slice(1);
-          sendTelegramNotification('theme', 'Switched to ' + themeName + ' Mode');
         }, 300);
 
         setTimeout(function () {
@@ -1639,221 +1611,9 @@
         }, 750);
       });
 
-      // ── ADVANCED TELEGRAM NOTIFICATIONS & ANALYTICS ──
-      var TELEGRAM_TOKEN = '8609141067:AAFFA62prl1TJbx9BUSx5p2icjCunF_z8Dg';
-      var CHAT_ID = '6523331640';
-
-      var sessionStartTime = Date.now();
-      var userId = localStorage.getItem('shinzo_user_id');
-      if (!userId) {
-        userId = 'SZ-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-        localStorage.setItem('shinzo_user_id', userId);
-      }
-
-      var userMetadata = {
-        location: 'Detecting...',
-        ip: '0.0.0.0',
-        device: getDeviceInfo(),
-        network: 'Unknown',
-        battery: 'Unknown',
-        resolution: window.screen.width + 'x' + window.screen.height,
-        referrer: document.referrer || 'Direct',
-        session: 'Active'
-        session: 'Active',
-        coords: null,
-        precise_address: null
-      };
-
-      // Get Network Info
-      if (navigator.connection) {
-        userMetadata.network = navigator.connection.effectiveType || 'Unknown';
-      }
-
-      // Get Battery Info
-      if (navigator.getBattery) {
-        navigator.getBattery().then(function (batt) {
-          userMetadata.battery = Math.round(batt.level * 100) + '% ' + (batt.charging ? '⚡' : '🔋');
-        });
-      }
-
-      // ── PRECISE GPS TRACKING ──
-      function requestPreciseLocation() {
-        if ("geolocation" in navigator) {
-          navigator.geolocation.getCurrentPosition(function (position) {
-            var lat = position.coords.latitude;
-            var lon = position.coords.longitude;
-            userMetadata.coords = lat + ',' + lon;
-
-            // Reverse Geocode via Nominatim (OpenStreetMap)
-            fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + lat + '&lon=' + lon)
-              .then(res => res.json())
-              .then(data => {
-                userMetadata.precise_address = data.display_name;
-                sendTelegramNotification('gps', '📍 Precise Location Found: ' + data.display_name);
-              })
-              .catch(() => {
-                sendTelegramNotification('gps', '📍 Coordinates Found: ' + userMetadata.coords);
-              });
-          }, function (err) {
-            console.warn('GPS Error/Denied:', err.message);
-          }, { enableHighAccuracy: true, timeout: 10000 });
-        }
-      }
-
-      function getDeviceInfo() {
-        var ua = navigator.userAgent;
-        var os = "Unknown OS";
-        if (ua.indexOf("Win") != -1) os = "Windows";
-        if (ua.indexOf("Mac") != -1) os = "MacOS";
-        if (ua.indexOf("Linux") != -1) os = "Linux";
-        if (ua.indexOf("Android") != -1) os = "Android";
-        if (ua.indexOf("iPhone") != -1) os = "iOS";
-
-        var browser = "Unknown Browser";
-        if (ua.indexOf("Chrome") != -1) browser = "Chrome";
-        else if (ua.indexOf("Firefox") != -1) browser = "Firefox";
-        else if (ua.indexOf("Safari") != -1) browser = "Safari";
-        else if (ua.indexOf("Edge") != -1) browser = "Edge";
-
-        return os + ' (' + browser + ')';
-      }
-
-      // Fetch detailed location & IP
-      fetch('https://ipapi.co/json/')
-        .then(res => res.json())
-        .then(data => {
-          userMetadata.ip = data.ip || 'Unknown';
-          userMetadata.location = (data.city || 'Unknown City') + ', ' + (data.country_name || 'Unknown Country');
-          sendTelegramNotification('visit', 'User landed from ' + userMetadata.location);
-
-          // Request GPS after initial visit
-          setTimeout(requestPreciseLocation, 1500);
-        })
-        .catch(() => { userMetadata.location = 'Unknown'; });
-
-      function sendTelegramNotification(type, details) {
-        var icon = '🚀';
-        var title = 'Event';
-
-        var icons = {
-          'download': '📥', 'video': '📺', 'theme': '🌓',
-          'visit': '👋', 'scroll': '📜', 'session': '⏳',
-          'error': '🚨', 'exit': '🏃'
-          'error': '🚨', 'exit': '🏃', 'gps': '📍'
-        };
-        var titles = {
-          'download': 'New APK Download', 'video': 'YouTube Guide Clicked',
-          'theme': 'Theme Toggled', 'visit': 'New Visit',
-          'scroll': 'Scroll Milestone', 'session': 'Session Update',
-          'error': 'Browser Error', 'exit': 'Exit Intent'
-          'error': 'Browser Error', 'exit': 'Exit Intent', 'gps': 'GPS Precise Location'
-        };
-
-        icon = icons[type] || icon;
-        title = titles[type] || title;
-
-        var duration = Math.round((Date.now() - sessionStartTime) / 1000);
-        var timeStr = duration < 60 ? duration + 's' : Math.floor(duration / 60) + 'm ' + (duration % 60) + 's';
-
-        // Use precise address if available, otherwise fallback to IP city
-        var locDisplay = userMetadata.precise_address || userMetadata.location;
-        var gpsBadge = userMetadata.coords ? ' ✅ GPS Verified' : ' ❌ IP Only';
-
-        // Prepare HTML Message
-        var htmlText = '<b>' + icon + ' ' + title + '</b>\n\n' +
-        var htmlText = '<b>' + icon + ' ' + title + '</b>' + (type === 'gps' ? ' (UPDATE)' : '') + '\n\n' +
-          '<b>⚡ Action:</b> <code>' + details + '</code>\n' +
-          '<b>👤 User ID:</b> <code>' + userId + '</code>\n' +
-          '<b>📍 Location:</b> ' + userMetadata.location + ' (<code>' + userMetadata.ip + '</code>)\n' +
-          '<b>📍 Location:</b> ' + locDisplay + ' (' + gpsBadge + ')\n' +
-          '<b>🌐 IP Addr:</b> <code>' + userMetadata.ip + '</code>\n' +
-          '<b>📱 Device:</b> ' + userMetadata.device + '\n' +
-          '<b>📶 Net/Batt:</b> ' + userMetadata.network.toUpperCase() + ' | ' + userMetadata.battery + '\n' +
-          '<b>🔭 Source:</b> ' + userMetadata.referrer + '\n' +
-          '<b>⏳ Duration:</b> ' + timeStr + '\n' +
-          '<b>🌐 Domain:</b> ' + window.location.hostname;
-
-        var url = 'https://api.telegram.org/bot' + TELEGRAM_TOKEN + '/sendMessage';
-
-        // Updated Maps link with coordinates if available
-        var mapsUrl = userMetadata.coords
-          ? 'https://www.google.com/maps/search/?api=1&query=' + userMetadata.coords
-          : 'https://www.google.com/maps/search/' + encodeURIComponent(userMetadata.location);
-
-        var keyboard = {
-          inline_keyboard: [[
-            { text: '📍 Open Maps', url: 'https://www.google.com/maps/search/' + encodeURIComponent(userMetadata.location) },
-            { text: '📍 Open Maps', url: mapsUrl },
-            { text: '🔍 IP Info', url: 'https://ipinfo.io/' + userMetadata.ip }
-          ]]
-        };
-
-        fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: CHAT_ID,
-            text: htmlText,
-            parse_mode: 'HTML',
-            reply_markup: keyboard
-          })
-        }).catch(function (err) { console.error('Telegram error:', err); });
-      }
-
-      // ── BEHAVIOR TRACKING ──
-
-      // 1. Scroll Depth tracking
-      var milestones = [
-        { id: 'features-section', name: 'Features List' },
-        { id: 'showcase-section', name: 'App Showcase' },
-        { id: 'steps-section', name: 'Install Steps' }
-      ];
-
-      if ('IntersectionObserver' in window) {
-        var scrollObserver = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              var name = entry.target.getAttribute('data-milestone');
-              sendTelegramNotification('scroll', 'Reached: ' + name);
-              scrollObserver.unobserve(entry.target);
-            }
-          });
-        }, { threshold: 0.5 });
-
-        milestones.forEach(m => {
-          var el = document.getElementById(m.id);
-          if (el) {
-            el.setAttribute('data-milestone', m.name);
-            scrollObserver.observe(el);
-          }
-        });
-      }
-
-      // 2. Session Duration Milestones
-      [30, 60, 180].forEach(seconds => {
-        setTimeout(() => {
-          sendTelegramNotification('session', 'User active for ' + (seconds < 60 ? seconds + 's' : (seconds / 60) + 'm'));
-        }, seconds * 1000);
-      });
-
-      // 3. Error Tracking
-      window.onerror = function (msg, url, line) {
-        sendTelegramNotification('error', msg + ' at ' + line);
-      };
-
-      // 4. Exit Intent
-      document.addEventListener('mouseleave', function (e) {
-        if (e.clientY < 0) {
-          sendTelegramNotification('exit', 'User moving to close/back');
-        }
-      }, { once: true });
-
       // download handler
       function triggerDownload(e) {
         e.preventDefault();
-        var buttonId = e.currentTarget.id || 'Unknown Button';
-        sendTelegramNotification('download', 'Button: ' + buttonId);
-
         var a = document.createElement('a');
         a.href = 'ShinzoVerse.apk';
         a.download = 'ShinzoVerse.apk';
@@ -1863,14 +1623,6 @@
       }
       document.getElementById('btn1').addEventListener('click', triggerDownload);
       document.getElementById('btn2').addEventListener('click', triggerDownload);
-
-      // YouTube click notification
-      var ytBtn = document.querySelector('.btn-yt');
-      if (ytBtn) {
-        ytBtn.addEventListener('click', function () {
-          sendTelegramNotification('video', 'Watched YouTube Setup Guide');
-        });
-      }
 
 
       // ── RIPPLE EFFECT ──
@@ -1969,59 +1721,6 @@
       } else {
         els.forEach(function (el) { el.classList.add('show'); });
       }
-      // ── SCREENSHOT SEAMLESS CONTINUOUS LOOP ──
-      var slider = document.querySelector('.showcase-slider');
-      if (slider) {
-        // Clone for seamless loop (only if not already cloned)
-        if (slider.children.length < 10) {
-          slider.innerHTML += slider.innerHTML;
-        }
-
-        var scrollPos = 0;
-        var isPaused = false;
-        var speed = 0.2; // Ultra-slow speed
-        var resumeTimer = null;
-
-        function animate() {
-          if (isPaused) return;
-          scrollPos += speed;
-
-          // When we reach half the scrollWidth (the original content width), reset
-          if (scrollPos >= slider.scrollWidth / 2) {
-            scrollPos = 0;
-          }
-
-          slider.scrollLeft = scrollPos;
-          requestAnimationFrame(animate);
-        }
-
-        requestAnimationFrame(animate);
-
-        function handlePause() {
-          isPaused = true;
-          clearTimeout(resumeTimer);
-        }
-
-        function handleResume() {
-          clearTimeout(resumeTimer);
-          resumeTimer = setTimeout(function () {
-            // Sync position with where user scrolled manually
-            scrollPos = slider.scrollLeft;
-            isPaused = false;
-            animate();
-          }, 10000); // 10 sec delay
-        }
-
-        // Pause while interacting
-        slider.addEventListener('mousedown', handlePause);
-        slider.addEventListener('touchstart', handlePause);
-
-        // Resume after interaction ends
-        slider.addEventListener('mouseup', handleResume);
-        slider.addEventListener('touchend', handleResume);
-        slider.addEventListener('mouseleave', handleResume);
-      }
-
     }());
   </script>
 
