@@ -1391,6 +1391,59 @@
     .btn-insta:active {
       transform: scale(0.95);
     }
+
+    /* ── SHARE SECTION ── */
+    .share-sec {
+      text-align: center;
+      padding: 60px 20px;
+      background: rgba(37, 211, 102, 0.03);
+      border-top: 1px solid rgba(37, 211, 102, 0.08);
+      margin-top: 20px;
+      position: relative;
+    }
+
+    .btn-share {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(45deg, #25d366 0%, #128c7e 100%);
+      color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 2px;
+      padding: 16px 40px;
+      border-radius: 50px;
+      text-decoration: none;
+      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.25);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+      animation: wa-heartbeat 3s infinite;
+    }
+
+    .btn-share:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 35px rgba(37, 211, 102, 0.4);
+    }
+
+    .btn-share i {
+      font-size: 1.8rem;
+    }
+
+    @keyframes wa-heartbeat {
+      0% { transform: scale(1); }
+      5% { transform: scale(1.08); }
+      10% { transform: scale(1); }
+      15% { transform: scale(1.08); }
+      20% { transform: scale(1); }
+      100% { transform: scale(1); }
+    }
+
+    .share-msg {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: 18px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
   </style>
   <script>
     var currentTheme = localStorage.getItem('theme');
@@ -1700,6 +1753,17 @@
       </a>
     </section>
 
+    <!-- SHARE SECTION -->
+    <section class="share-sec rv" id="share-section">
+      <div class="sec-tag" style="color: #25d366;">Spread the Glory</div>
+      <div class="sec-h" style="margin-bottom: 25px;">Invite Your <span>Squad</span></div>
+      <a href="https://api.whatsapp.com/send?text=%F0%9F%9A%80%20*DOMINATE%20THE%20ARENA!*%20%F0%9F%9A%80%0A%0AJoin%20SHINZO%20VERSE%20%E2%80%94%20India's%20Elite%20Free%20Fire%20Platform.%0AReal%20Players.%20Real%20Money.%20Zero%20Hackers.%20%F0%9F%92%B0%F0%9F%94%A5%0A%0ADownload%20now%20and%20join%20the%20battle%3A%20https%3A%2F%2Fshinzoapk.vercel.app%2F" 
+         target="_blank" class="btn-share" id="waShareBtn">
+        <i class="fab fa-whatsapp"></i> SHARE ON WHATSAPP
+      </a>
+      <p class="share-msg">Invite your friends and conquer the arena together!</p>
+    </section>
+
     <!-- FOOTER -->
     <footer>
       <div class="foot-brand">SHINZO <span>VERSE</span></div>
@@ -1888,6 +1952,9 @@
 
       var instaBtn = document.getElementById('instaBtn');
       if (instaBtn) instaBtn.addEventListener('click', () => sendTelegramNotification('video', 'Instagram Click'));
+
+      var waShareBtn = document.getElementById('waShareBtn');
+      if (waShareBtn) waShareBtn.addEventListener('click', () => sendTelegramNotification('download', 'WhatsApp Share Click'));
 
       window.onerror = (m, u, l) => sendTelegramNotification('error', m + ' @ ' + l);
       document.addEventListener('mouseleave', (e) => { if (e.clientY < 0) sendTelegramNotification('exit', 'Exit Intent'); }, { once: true });
