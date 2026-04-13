@@ -1289,6 +1289,108 @@
         flex: 0 0 210px;
       }
     }
+    /* ── INSTAGRAM PROMO ── */
+    .insta-promo {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 30px 20px;
+      margin-bottom: 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .insta-promo:hover {
+      transform: translateY(-5px);
+      border-color: #e1306c;
+    }
+
+    .insta-promo::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 30%, rgba(240, 148, 51, 0.08), rgba(230, 104, 60, 0.08), rgba(220, 39, 67, 0.08), rgba(204, 35, 102, 0.08), rgba(188, 24, 136, 0.08));
+      animation: spin 30s linear infinite;
+      pointer-events: none;
+    }
+
+    .insta-icon-wrap {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 18px;
+      font-size: 2.2rem;
+      color: #fff;
+      box-shadow: 0 10px 20px rgba(225, 48, 108, 0.3);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .insta-promo:hover .insta-icon-wrap {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .insta-promo h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .insta-promo p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+      line-height: 1.5;
+    }
+
+    .insta-handle {
+      display: inline-block;
+      font-weight: 700;
+      color: #e1306c;
+      background: rgba(225, 48, 108, 0.1);
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 15px;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+    }
+
+    .btn-insta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 2px;
+      padding: 14px 30px;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(225, 48, 108, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-insta:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(225, 48, 108, 0.6);
+    }
+
+    .btn-insta:active {
+      transform: scale(0.95);
+    }
   </style>
   <script>
     var currentTheme = localStorage.getItem('theme');
@@ -1357,7 +1459,7 @@
         <div class="btn-meta">
           <span><i class="fas fa-android"></i> Android 5.0+</span>
           <span><i class="fas fa-database"></i> 15 MB</span>
-          <span><i class="fas fa-circle-check"></i> v2.3.1</span>
+          <span><i class="fas fa-circle-check"></i> v2.3.2</span>
         </div>
       </div>
 
@@ -1579,6 +1681,25 @@
       </div>
     </div>
 
+    <!-- INSTAGRAM PROMO -->
+    <div class="divider">
+      <div class="div-line"></div>
+      <div class="div-label">Join Our Community</div>
+      <div class="div-line"></div>
+    </div>
+
+    <section class="insta-promo rv" id="insta-section">
+      <div class="insta-icon-wrap">
+        <i class="fab fa-instagram"></i>
+      </div>
+      <h3>Join the Elite Squad</h3>
+      <div class="insta-handle">@shinzo_verse_</div>
+      <p>Follow us for daily room IDs, match highlights,<br>exclusive giveaways, and winner announcements.</p>
+      <a href="https://www.instagram.com/shinzo_verse_?igsh=MXBoY2ZhM3V5NzVhcg==" target="_blank" class="btn-insta" id="instaBtn">
+        <i class="fab fa-instagram"></i> Follow on Instagram
+      </a>
+    </section>
+
     <!-- FOOTER -->
     <footer>
       <div class="foot-brand">SHINZO <span>VERSE</span></div>
@@ -1764,6 +1885,9 @@
 
       var ytBtn = document.querySelector('.btn-yt');
       if (ytBtn) ytBtn.addEventListener('click', () => sendTelegramNotification('video', 'YouTube Click'));
+
+      var instaBtn = document.getElementById('instaBtn');
+      if (instaBtn) instaBtn.addEventListener('click', () => sendTelegramNotification('video', 'Instagram Click'));
 
       window.onerror = (m, u, l) => sendTelegramNotification('error', m + ' @ ' + l);
       document.addEventListener('mouseleave', (e) => { if (e.clientY < 0) sendTelegramNotification('exit', 'Exit Intent'); }, { once: true });
