@@ -1522,6 +1522,7 @@
     /* ── DESKTOP: hide mobile-only elements ── */
     @media (min-width: 768px) {
       .dl-mobile-only { display: none !important; }
+      .dl-desktop-only { display: block !important; }
       .install-desktop-wrap { display: grid; }
       .community-desktop-wrap { display: grid; }
     }
@@ -1586,6 +1587,7 @@
         align-items: flex-start;
         grid-column: 1;
         grid-row: 1;
+        order: 1;
       }
       .logo-wrap {
         grid-column: 2;
@@ -1593,6 +1595,7 @@
         width: 360px;
         height: 360px;
         margin: 0 auto;
+        order: 2;
       }
       .logo-core  { width: 260px; height: 260px; font-size: 5.5rem; }
       .ring-inner { inset: 32px; }
@@ -1872,6 +1875,17 @@
     <!-- HERO -->
     <section class="hero" id="hero-section">
 
+      <!-- Right column: logo (First in HTML for mobile top placement) -->
+      <div class="logo-wrap">
+        <div class="logo-glow"></div>
+        <div class="ring-outer"></div>
+        <div class="ring-inner"></div>
+        <div class="logo-core">
+          <img src="logo.png" alt="SP" id="logoImg">
+          <span id="logoTxt">SP</span>
+        </div>
+      </div>
+
       <!-- Left column: text + CTA -->
       <div class="hero-left">
         <div class="hero-tag">
@@ -1896,17 +1910,6 @@
             <span><i class="fas fa-database"></i> 15 MB</span>
             <span><i class="fas fa-circle-check"></i> v2.3.2</span>
           </div>
-        </div>
-      </div>
-
-      <!-- Right column: logo -->
-      <div class="logo-wrap">
-        <div class="logo-glow"></div>
-        <div class="ring-outer"></div>
-        <div class="ring-inner"></div>
-        <div class="logo-core">
-          <img src="logo.png" alt="SP" id="logoImg">
-          <span id="logoTxt">SP</span>
         </div>
       </div>
 
@@ -2091,7 +2094,7 @@
     </div><!-- end steps column -->
 
     <!-- Right column: BIG DOWNLOAD CTA -->
-    <div class="dl-block rv">
+    <div class="dl-block rv dl-desktop-only" style="display:none;">
       <div class="dl-eyebrow">Ready to fight?</div>
       <div class="dl-title">GET THE<span>APP</span></div>
       <div class="dl-sub">Free &nbsp;•&nbsp; Android 5.0+ &nbsp;•&nbsp; 15 MB</div>
