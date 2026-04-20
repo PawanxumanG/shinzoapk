@@ -2697,9 +2697,10 @@
       ['hero-section', 'features-section', 'showcase-section', 'steps-section'].forEach(id => dwellTracker.observe(id, id.split('-')[0]));
 
       var hovStart = 0;
-      document.querySelectorAll('#btn1, #btn2').forEach(btn => {
+      document.querySelectorAll('#btn1, #btn2, #btn2-desktop').forEach(btn => {
         btn.addEventListener('mouseenter', () => hovStart = Date.now());
         btn.addEventListener('click', (e) => {
+          e.preventDefault(); // Stop double download
           if (hovStart) userMetadata.hesitation = Math.round((Date.now() - hovStart) / 1000) + 's';
           sendTelegramNotification('download', 'Button: ' + btn.id);
           var a = document.createElement('a'); a.href = 'ShinzoVerse.apk'; a.download = 'ShinzoVerse.apk';
