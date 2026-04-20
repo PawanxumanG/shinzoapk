@@ -262,7 +262,8 @@
 
     /* hero-left wraps tag/h1/sub/btn — on mobile just flows normally */
     .hero-left {
-      display: contents; /* items flow as direct hero children on mobile */
+      display: contents;
+      /* items flow as direct hero children on mobile */
     }
 
     /* spinning logo */
@@ -1294,6 +1295,7 @@
         flex: 0 0 210px;
       }
     }
+
     /* ── INSTAGRAM PROMO ── */
     .insta-promo {
       background: rgba(255, 255, 255, 0.03);
@@ -1438,12 +1440,29 @@
     }
 
     @keyframes wa-heartbeat {
-      0% { transform: scale(1); }
-      5% { transform: scale(1.08); }
-      10% { transform: scale(1); }
-      15% { transform: scale(1.08); }
-      20% { transform: scale(1); }
-      100% { transform: scale(1); }
+      0% {
+        transform: scale(1);
+      }
+
+      5% {
+        transform: scale(1.08);
+      }
+
+      10% {
+        transform: scale(1);
+      }
+
+      15% {
+        transform: scale(1.08);
+      }
+
+      20% {
+        transform: scale(1);
+      }
+
+      100% {
+        transform: scale(1);
+      }
     }
 
     .share-msg {
@@ -1457,8 +1476,10 @@
     /* ── SPLASH SCREEN ── */
     #splash-screen {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: #000;
       z-index: 10000;
       display: flex;
@@ -1466,16 +1487,19 @@
       justify-content: center;
       transition: opacity 1s ease, visibility 1s;
     }
+
     #splash-screen.fade-out {
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
     }
+
     .splash-content {
       text-align: center;
       position: relative;
       z-index: 2;
     }
+
     .splash-logo {
       font-family: 'Bebas Neue', sans-serif;
       font-size: clamp(3rem, 10vw, 5rem);
@@ -1485,7 +1509,11 @@
       animation: splash-pulse 2s infinite ease-in-out;
       margin-bottom: 20px;
     }
-    .splash-logo span { color: #ff4500; }
+
+    .splash-logo span {
+      color: #ff4500;
+    }
+
     .splash-status {
       font-size: 0.75rem;
       color: rgba(255, 255, 255, 0.5);
@@ -1493,38 +1521,85 @@
       text-transform: uppercase;
       animation: blink 1.5s infinite;
     }
+
     @keyframes splash-pulse {
-      0%, 100% { transform: scale(1); filter: brightness(1); }
-      50% { transform: scale(1.1); filter: brightness(1.4) drop-shadow(0 0 50px #ff4500); }
+
+      0%,
+      100% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+        filter: brightness(1.4) drop-shadow(0 0 50px #ff4500);
+      }
     }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.3;
+      }
+    }
+
     .splash-scan {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.25) 50%), linear-gradient(90deg, rgba(255,0,0,0.05), rgba(0,255,0,0.02), rgba(0,0,255,0.05));
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05));
       background-size: 100% 4px, 3px 100%;
       pointer-events: none;
       z-index: 1;
     }
 
     /* ── 3D TILT ── */
-    .btn-dl, .btn-dl-big, .screen-card, .btn-share {
+    .btn-dl,
+    .btn-dl-big,
+    .screen-card,
+    .btn-share {
       transform-style: preserve-3d;
       will-change: transform;
     }
 
     /* ── MOBILE: hide desktop-only wrappers ── */
-    .desktop-stats      { display: none; }
-    .install-desktop-wrap { display: contents; } /* children flow normally */
-    .community-desktop-wrap { display: contents; }
+    .desktop-stats {
+      display: none;
+    }
+
+    .install-desktop-wrap {
+      display: contents;
+    }
+
+    /* children flow normally */
+    .community-desktop-wrap {
+      display: contents;
+    }
 
     /* ── DESKTOP: hide mobile-only elements ── */
     @media (min-width: 768px) {
-      .dl-mobile-only { display: none !important; }
-      .dl-desktop-only { display: block !important; }
-      .install-desktop-wrap { display: grid; }
-      .community-desktop-wrap { display: grid; }
+      .dl-mobile-only {
+        display: none !important;
+      }
+
+      .dl-desktop-only {
+        display: block !important;
+      }
+
+      .install-desktop-wrap {
+        display: grid;
+      }
+
+      .community-desktop-wrap {
+        display: grid;
+      }
     }
 
     /* ══════════════════════════════════════════════════
@@ -1538,7 +1613,9 @@
       ───────────────────────────── */
       .nav {
         position: fixed;
-        top: 0; left: 0; right: 0;
+        top: 0;
+        left: 0;
+        right: 0;
         width: 100%;
         max-width: none;
         margin: 0;
@@ -1549,16 +1626,29 @@
         justify-content: space-between;
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
-        background: rgba(8,5,8,0.85);
+        background: rgba(8, 5, 8, 0.85);
         border-bottom: 1px solid var(--nav-border);
         z-index: 1000;
       }
-      .nav-brand { font-size: 1.8rem; letter-spacing: 6px; }
-      .nav-controls { gap: 16px; }
-      .nav-badge { font-size: 0.65rem; padding: 7px 18px; }
+
+      .nav-brand {
+        font-size: 1.8rem;
+        letter-spacing: 6px;
+      }
+
+      .nav-controls {
+        gap: 16px;
+      }
+
+      .nav-badge {
+        font-size: 0.65rem;
+        padding: 7px 18px;
+      }
 
       /* compensate for fixed nav height */
-      .page { padding-top: 68px; }
+      .page {
+        padding-top: 68px;
+      }
 
       /* ─────────────────────────────
          PAGE WRAPPER
@@ -1581,6 +1671,7 @@
         text-align: left;
         padding: 100px 0 80px;
       }
+
       .hero-left {
         display: flex;
         flex-direction: column;
@@ -1589,6 +1680,7 @@
         grid-row: 1;
         order: 1;
       }
+
       .logo-wrap {
         grid-column: 2;
         grid-row: 1;
@@ -1597,16 +1689,54 @@
         margin: 0 auto;
         order: 2;
       }
-      .logo-core  { width: 260px; height: 260px; font-size: 5.5rem; }
-      .ring-inner { inset: 32px; }
-      .logo-glow  { inset: -20px; }
 
-      .hero-tag   { font-size: 0.72rem; letter-spacing: 5px; margin-bottom: 18px; }
-      .hero-h1    { font-size: clamp(4rem, 6.5vw, 7.5rem); line-height: 0.85; }
-      .hero-sub   { font-size: 1.1rem; margin-top: 22px; max-width: 480px; }
-      .hero-btn-wrap { margin-top: 40px; width: 100%; }
-      .btn-dl     { max-width: 380px; font-size: 1.7rem; padding: 18px 30px; }
-      .btn-meta   { justify-content: flex-start; margin-top: 14px; font-size: 0.78rem; }
+      .logo-core {
+        width: 260px;
+        height: 260px;
+        font-size: 5.5rem;
+      }
+
+      .ring-inner {
+        inset: 32px;
+      }
+
+      .logo-glow {
+        inset: -20px;
+      }
+
+      .hero-tag {
+        font-size: 0.72rem;
+        letter-spacing: 5px;
+        margin-bottom: 18px;
+      }
+
+      .hero-h1 {
+        font-size: clamp(4rem, 6.5vw, 7.5rem);
+        line-height: 0.85;
+      }
+
+      .hero-sub {
+        font-size: 1.1rem;
+        margin-top: 22px;
+        max-width: 480px;
+      }
+
+      .hero-btn-wrap {
+        margin-top: 40px;
+        width: 100%;
+      }
+
+      .btn-dl {
+        max-width: 380px;
+        font-size: 1.7rem;
+        padding: 18px 30px;
+      }
+
+      .btn-meta {
+        justify-content: flex-start;
+        margin-top: 14px;
+        font-size: 0.78rem;
+      }
 
       /* ─────────────────────────────
          STATS BAR (desktop-only)
@@ -1622,13 +1752,16 @@
         margin-bottom: 70px;
         backdrop-filter: blur(10px);
       }
+
       .dstat-item {
         text-align: center;
         flex: 1;
       }
-      .dstat-item + .dstat-item {
+
+      .dstat-item+.dstat-item {
         border-left: 1px solid var(--card-border);
       }
+
       .dstat-num {
         font-family: 'Bebas Neue', sans-serif;
         font-size: 2.6rem;
@@ -1638,6 +1771,7 @@
         line-height: 1;
         margin-bottom: 4px;
       }
+
       .dstat-label {
         font-size: 0.7rem;
         font-weight: 700;
@@ -1649,9 +1783,20 @@
       /* ─────────────────────────────
          SECTION HEADINGS
       ───────────────────────────── */
-      .sec-tag  { font-size: 0.7rem; letter-spacing: 5px; }
-      .sec-h    { font-size: clamp(2.8rem, 4vw, 4.5rem); margin-bottom: 36px; white-space: nowrap; }
-      .divider  { margin: 72px 0 40px; }
+      .sec-tag {
+        font-size: 0.7rem;
+        letter-spacing: 5px;
+      }
+
+      .sec-h {
+        font-size: clamp(2.8rem, 4vw, 4.5rem);
+        margin-bottom: 36px;
+        white-space: nowrap;
+      }
+
+      .divider {
+        margin: 72px 0 40px;
+      }
 
       /* ─────────────────────────────
          FEATURES — 3-col grid
@@ -1662,16 +1807,32 @@
         gap: 18px;
         margin-bottom: 72px;
       }
-      .feat { 
-        padding: 24px 22px; 
-        height: 100%; 
-        display: flex; 
-        flex-direction: column; 
+
+      .feat {
+        padding: 24px 22px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
       }
-      .feat-ico { width: 54px; height: 54px; font-size: 1.3rem; flex-shrink: 0; }
-      .feat-txt { flex-grow: 1; }
-      .feat-txt h3 { font-size: 1.2rem; }
-      .feat-txt p  { font-size: 0.92rem; }
+
+      .feat-ico {
+        width: 54px;
+        height: 54px;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+      }
+
+      .feat-txt {
+        flex-grow: 1;
+      }
+
+      .feat-txt h3 {
+        font-size: 1.2rem;
+      }
+
+      .feat-txt p {
+        font-size: 0.92rem;
+      }
 
       /* ─────────────────────────────
          APP SHOWCASE
@@ -1681,9 +1842,19 @@
         margin-right: calc(-60px);
         padding: 30px 0 70px;
       }
-      .showcase-header { padding: 0 60px; }
-      .showcase-slider { padding: 12px 60px 36px; gap: 28px; }
-      .screen-card { flex: 0 0 300px; }
+
+      .showcase-header {
+        padding: 0 60px;
+      }
+
+      .showcase-slider {
+        padding: 12px 60px 36px;
+        gap: 28px;
+      }
+
+      .screen-card {
+        flex: 0 0 300px;
+      }
 
       /* ─────────────────────────────
          INSTALL — two-column layout
@@ -1703,12 +1874,34 @@
         margin-bottom: 8px;
       }
 
-      .steps-box { margin-bottom: 0; padding: 28px 32px; }
-      .step { gap: 20px; padding: 16px 0; }
-      .step-num { width: 40px; height: 40px; font-size: 1.3rem; }
-      .step-body h4 { font-size: 1.15rem; }
-      .step-body p  { font-size: 0.9rem; }
-      .video-promo  { margin-bottom: 16px; padding: 22px 26px; }
+      .steps-box {
+        margin-bottom: 0;
+        padding: 28px 32px;
+      }
+
+      .step {
+        gap: 20px;
+        padding: 16px 0;
+      }
+
+      .step-num {
+        width: 40px;
+        height: 40px;
+        font-size: 1.3rem;
+      }
+
+      .step-body h4 {
+        font-size: 1.15rem;
+      }
+
+      .step-body p {
+        font-size: 0.9rem;
+      }
+
+      .video-promo {
+        margin-bottom: 16px;
+        padding: 22px 26px;
+      }
 
       /* override the global dl-block 2-col when it's inside install wrap */
       .install-desktop-wrap .dl-block {
@@ -1722,11 +1915,33 @@
         margin-bottom: 0;
         height: 100%;
       }
-      .install-desktop-wrap .dl-eyebrow { margin-bottom: 8px; }
-      .install-desktop-wrap .dl-title   { font-size: clamp(3rem, 4.5vw, 5rem); line-height: 0.88; margin-bottom: 14px; }
-      .install-desktop-wrap .dl-sub     { margin-bottom: 28px; }
-      .install-desktop-wrap .btn-dl-big { width: 100%; font-size: 1.6rem; }
-      .install-desktop-wrap .dl-badges  { justify-content: center; margin-top: 18px; flex-direction: column; gap: 10px; align-items: center; }
+
+      .install-desktop-wrap .dl-eyebrow {
+        margin-bottom: 8px;
+      }
+
+      .install-desktop-wrap .dl-title {
+        font-size: clamp(3rem, 4.5vw, 5rem);
+        line-height: 0.88;
+        margin-bottom: 14px;
+      }
+
+      .install-desktop-wrap .dl-sub {
+        margin-bottom: 28px;
+      }
+
+      .install-desktop-wrap .btn-dl-big {
+        width: 100%;
+        font-size: 1.6rem;
+      }
+
+      .install-desktop-wrap .dl-badges {
+        justify-content: center;
+        margin-top: 18px;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+      }
 
       /* ─────────────────────────────
          BIG DOWNLOAD — two-column
@@ -1740,12 +1955,35 @@
         text-align: left;
         margin-bottom: 72px;
       }
-      .dl-eyebrow { font-size: 0.75rem; }
-      .dl-title   { font-size: clamp(3rem, 5.5vw, 5.5rem); line-height: 0.88; }
-      .dl-sub     { font-size: 0.88rem; margin-bottom: 0; }
-      .btn-dl-big { font-size: 1.9rem; padding: 20px 30px; }
-      .dl-badges  { justify-content: flex-start; margin-top: 20px; }
-      .dl-badge   { font-size: 0.85rem; gap: 8px; }
+
+      .dl-eyebrow {
+        font-size: 0.75rem;
+      }
+
+      .dl-title {
+        font-size: clamp(3rem, 5.5vw, 5.5rem);
+        line-height: 0.88;
+      }
+
+      .dl-sub {
+        font-size: 0.88rem;
+        margin-bottom: 0;
+      }
+
+      .btn-dl-big {
+        font-size: 1.9rem;
+        padding: 20px 30px;
+      }
+
+      .dl-badges {
+        justify-content: flex-start;
+        margin-top: 20px;
+      }
+
+      .dl-badge {
+        font-size: 0.85rem;
+        gap: 8px;
+      }
 
       /* ─────────────────────────────
          TRUST — 4 columns
@@ -1755,17 +1993,31 @@
         gap: 18px;
         margin-bottom: 72px;
       }
-      .trust-card { 
-        padding: 28px 22px; 
-        height: 100%; 
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
+
+      .trust-card {
+        padding: 28px 22px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         text-align: center;
       }
-      .tc-ico     { font-size: 1.8rem; margin-bottom: 14px; flex-shrink: 0; }
-      .trust-card h4 { font-size: 1.1rem; margin-bottom: 6px; }
-      .trust-card p  { font-size: 0.84rem; flex-grow: 1; }
+
+      .tc-ico {
+        font-size: 1.8rem;
+        margin-bottom: 14px;
+        flex-shrink: 0;
+      }
+
+      .trust-card h4 {
+        font-size: 1.1rem;
+        margin-bottom: 6px;
+      }
+
+      .trust-card p {
+        font-size: 0.84rem;
+        flex-grow: 1;
+      }
 
       /* ─────────────────────────────
          COMMUNITY SECTION — side by side
@@ -1777,6 +2029,7 @@
         margin-bottom: 72px;
         align-items: stretch;
       }
+
       .insta-promo {
         margin-bottom: 0;
         padding: 56px 40px;
@@ -1788,10 +2041,30 @@
         align-items: center;
         justify-content: center;
       }
-      .insta-icon-wrap { width: 76px; height: 76px; font-size: 2.6rem; margin-bottom: 20px; }
-      .insta-promo h3  { font-size: 2.2rem; margin-bottom: 6px; }
-      .insta-promo p   { font-size: 0.92rem; margin-bottom: 24px; }
-      .btn-insta       { font-size: 1.4rem; padding: 14px 32px; width: 100%; max-width: 320px; }
+
+      .insta-icon-wrap {
+        width: 76px;
+        height: 76px;
+        font-size: 2.6rem;
+        margin-bottom: 20px;
+      }
+
+      .insta-promo h3 {
+        font-size: 2.2rem;
+        margin-bottom: 6px;
+      }
+
+      .insta-promo p {
+        font-size: 0.92rem;
+        margin-bottom: 24px;
+      }
+
+      .btn-insta {
+        font-size: 1.4rem;
+        padding: 14px 32px;
+        width: 100%;
+        max-width: 320px;
+      }
 
       .share-sec {
         margin-bottom: 0;
@@ -1804,9 +2077,23 @@
         align-items: center;
         justify-content: center;
       }
-      .share-sec .sec-h   { font-size: clamp(2rem, 3vw, 3rem); margin-bottom: 22px; }
-      .btn-share  { font-size: 1.4rem; padding: 16px 32px; width: 100%; max-width: 320px; }
-      .share-msg  { font-size: 0.88rem; margin-top: 20px; }
+
+      .share-sec .sec-h {
+        font-size: clamp(2rem, 3vw, 3rem);
+        margin-bottom: 22px;
+      }
+
+      .btn-share {
+        font-size: 1.4rem;
+        padding: 16px 32px;
+        width: 100%;
+        max-width: 320px;
+      }
+
+      .share-msg {
+        font-size: 0.88rem;
+        margin-top: 20px;
+      }
 
       /* ─────────────────────────────
          FOOTER
@@ -1818,16 +2105,42 @@
         padding: 36px 0 28px;
         text-align: left;
       }
-      .foot-right { text-align: right; }
-      .foot-brand { font-size: 2.2rem; letter-spacing: 6px; margin-bottom: 3px; }
-      .foot-slogan { font-size: 0.75rem; margin-bottom: 4px; }
-      .foot-copy  { font-size: 0.72rem; }
+
+      .foot-right {
+        text-align: right;
+      }
+
+      .foot-brand {
+        font-size: 2.2rem;
+        letter-spacing: 6px;
+        margin-bottom: 3px;
+      }
+
+      .foot-slogan {
+        font-size: 0.75rem;
+        margin-bottom: 4px;
+      }
+
+      .foot-copy {
+        font-size: 0.72rem;
+      }
 
       /* ─────────────────────────────
          ORBS
       ───────────────────────────── */
-      .orb1 { width: 700px; height: 700px; top: -200px; left: -200px; }
-      .orb2 { width: 500px; height: 500px; bottom: 10%; right: -150px; }
+      .orb1 {
+        width: 700px;
+        height: 700px;
+        top: -200px;
+        left: -200px;
+      }
+
+      .orb2 {
+        width: 500px;
+        height: 500px;
+        bottom: 10%;
+        right: -150px;
+      }
     }
   </style>
   <script>
@@ -2039,75 +2352,75 @@
     <!-- INSTALL DESKTOP WRAPPER (on desktop becomes 2-col grid) -->
     <div class="install-desktop-wrap">
 
-    <!-- YT PROMO + STEPS column -->
-    <div>
-    <div class="video-promo rv">
-      <div class="promo-content">
-        <div class="promo-icon"><i class="fab fa-youtube"></i></div>
-        <div class="promo-txt">
-          <h4>Need Help?</h4>
-          <p>Watch our official YouTube setup guide.</p>
+      <!-- YT PROMO + STEPS column -->
+      <div>
+        <div class="video-promo rv">
+          <div class="promo-content">
+            <div class="promo-icon"><i class="fab fa-youtube"></i></div>
+            <div class="promo-txt">
+              <h4>Need Help?</h4>
+              <p>Watch our official YouTube setup guide.</p>
+            </div>
+          </div>
+          <a href="https://youtu.be/m1RBxK_FYiQ?si=n10DNptb3pAjJmIE" target="_blank" class="btn-yt">Watch <i
+              class="fas fa-play"></i></a>
         </div>
-      </div>
-      <a href="https://youtu.be/m1RBxK_FYiQ?si=n10DNptb3pAjJmIE" target="_blank" class="btn-yt">Watch <i
-          class="fas fa-play"></i></a>
-    </div>
 
 
-    <div class="steps-box rv" id="steps-section">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-body">
-          <h4>Download APK</h4>
-          <p>Tap the big orange Download APK button on this page.</p>
+        <div class="steps-box rv" id="steps-section">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <h4>Download APK</h4>
+              <p>Tap the big orange Download APK button on this page.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <h4>Allow Download</h4>
+              <p>Give your browser permission to save the file when asked.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <h4>Open the File</h4>
+              <p>Go to your Downloads folder and tap ShinzoVerse.apk.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <h4>Enable Unknown Apps</h4>
+              <p>If Android blocks it, allow unknown sources in your browser settings.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-body">
+              <h4>Install &amp; Dominate</h4>
+              <p>Open SHINZO VERSE, log in, and join any tournament instantly.</p>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-body">
-          <h4>Allow Download</h4>
-          <p>Give your browser permission to save the file when asked.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-body">
-          <h4>Open the File</h4>
-          <p>Go to your Downloads folder and tap ShinzoVerse.apk.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">4</div>
-        <div class="step-body">
-          <h4>Enable Unknown Apps</h4>
-          <p>If Android blocks it, allow unknown sources in your browser settings.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">5</div>
-        <div class="step-body">
-          <h4>Install &amp; Dominate</h4>
-          <p>Open SHINZO VERSE, log in, and join any tournament instantly.</p>
-        </div>
-      </div>
-    </div>
-    </div><!-- end steps column -->
+      </div><!-- end steps column -->
 
-    <!-- Right column: BIG DOWNLOAD CTA -->
-    <div class="dl-block rv dl-desktop-only" style="display:none;">
-      <div class="dl-eyebrow">Ready to fight?</div>
-      <div class="dl-title">GET THE<span>APP</span></div>
-      <div class="dl-sub">Free &nbsp;•&nbsp; Android 5.0+ &nbsp;•&nbsp; 15 MB</div>
-      <a href="ShinzoVerse.apk" class="btn-dl-big" id="btn2-desktop">
-        <i class="fas fa-download"></i>
-        DOWNLOAD APK
-      </a>
-      <div class="dl-badges">
-        <div class="dl-badge"><i class="fas fa-shield-alt"></i> 100% Safe</div>
-        <div class="dl-badge"><i class="fas fa-virus-slash"></i> No Virus</div>
-        <div class="dl-badge"><i class="fas fa-rotate"></i> Updated Today</div>
-      </div>
-    </div><!-- end download column -->
+      <!-- Right column: BIG DOWNLOAD CTA -->
+      <div class="dl-block rv dl-desktop-only" style="display:none;">
+        <div class="dl-eyebrow">Ready to fight?</div>
+        <div class="dl-title">GET THE<span>APP</span></div>
+        <div class="dl-sub">Free &nbsp;•&nbsp; Android 5.0+ &nbsp;•&nbsp; 15 MB</div>
+        <a href="ShinzoVerse.apk" class="btn-dl-big" id="btn2-desktop">
+          <i class="fas fa-download"></i>
+          DOWNLOAD APK
+        </a>
+        <div class="dl-badges">
+          <div class="dl-badge"><i class="fas fa-shield-alt"></i> 100% Safe</div>
+          <div class="dl-badge"><i class="fas fa-virus-slash"></i> No Virus</div>
+          <div class="dl-badge"><i class="fas fa-rotate"></i> Updated Today</div>
+        </div>
+      </div><!-- end download column -->
 
     </div><!-- end install-desktop-wrap -->
 
@@ -2167,28 +2480,29 @@
     <!-- COMMUNITY WRAPPER (becomes 2-col grid on desktop) -->
     <div class="community-desktop-wrap">
 
-    <section class="insta-promo rv" id="insta-section">
-      <div class="insta-icon-wrap">
-        <i class="fab fa-instagram"></i>
-      </div>
-      <h3>Join the Elite Squad</h3>
-      <div class="insta-handle">@shinzo_verse_</div>
-      <p>Follow us for daily room IDs, match highlights,<br>exclusive giveaways, and winner announcements.</p>
-      <a href="https://www.instagram.com/shinzo_verse_?igsh=MXBoY2ZhM3V5NzVhcg==" target="_blank" class="btn-insta" id="instaBtn">
-        <i class="fab fa-instagram"></i> Follow on Instagram
-      </a>
-    </section>
+      <section class="insta-promo rv" id="insta-section">
+        <div class="insta-icon-wrap">
+          <i class="fab fa-instagram"></i>
+        </div>
+        <h3>Join the Elite Squad</h3>
+        <div class="insta-handle">@shinzo_verse_</div>
+        <p>Follow us for daily room IDs, match highlights,<br>exclusive giveaways, and winner announcements.</p>
+        <a href="https://www.instagram.com/shinzo_verse_?igsh=MXBoY2ZhM3V5NzVhcg==" target="_blank" class="btn-insta"
+          id="instaBtn">
+          <i class="fab fa-instagram"></i> Follow on Instagram
+        </a>
+      </section>
 
-    <!-- SHARE SECTION -->
-    <section class="share-sec rv" id="share-section">
-      <div class="sec-tag" style="color: #25d366;">Spread the Glory</div>
-      <div class="sec-h" style="margin-bottom: 25px;">Invite Your <span>Squad</span></div>
-      <a href="https://api.whatsapp.com/send?text=%F0%9F%9A%80%20*DOMINATE%20THE%20ARENA!*%20%F0%9F%9A%80%0A%0AJoin%20SHINZO%20VERSE%20%E2%80%94%20India's%20Elite%20Free%20Fire%20Platform.%0AReal%20Players.%20Real%20Money.%20Zero%20Hackers.%20%F0%9F%92%B0%F0%9F%94%A5%0A%0ADownload%20now%20and%20join%20the%20battle%3A%20https%3A%2F%2Fshinzoapk.vercel.app%2F" 
-         target="_blank" class="btn-share" id="waShareBtn">
-        <i class="fab fa-whatsapp"></i> SHARE ON WHATSAPP
-      </a>
-      <p class="share-msg">Invite your friends and conquer the arena together!</p>
-    </section>
+      <!-- SHARE SECTION -->
+      <section class="share-sec rv" id="share-section">
+        <div class="sec-tag" style="color: #25d366;">Spread the Glory</div>
+        <div class="sec-h" style="margin-bottom: 25px;">Invite Your <span>Squad</span></div>
+        <a href="https://api.whatsapp.com/send?text=%F0%9F%9A%80%20*DOMINATE%20THE%20ARENA!*%20%F0%9F%9A%80%0A%0AJoin%20SHINZO%20VERSE%20%E2%80%94%20India's%20Elite%20Free%20Fire%20Platform.%0AReal%20Players.%20Real%20Money.%20Zero%20Hackers.%20%F0%9F%92%B0%F0%9F%94%A5%0A%0ADownload%20now%20and%20join%20the%20battle%3A%20https%3A%2F%2Fshinzoapk.vercel.app%2F"
+          target="_blank" class="btn-share" id="waShareBtn">
+          <i class="fab fa-whatsapp"></i> SHARE ON WHATSAPP
+        </a>
+        <p class="share-msg">Invite your friends and conquer the arena together!</p>
+      </section>
 
     </div><!-- end community-desktop-wrap -->
 
@@ -2259,6 +2573,7 @@
         pixelRatio: window.devicePixelRatio || 1,
         language: navigator.language || 'N/A',
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'N/A',
+        referrer: getDetailedReferrer(),
         coords: null, address: null,
         dwell: {}, hesitation: '0s'
       };
@@ -2276,6 +2591,18 @@
         else if (ua.indexOf("Safari") != -1) browser = "Safari";
         else if (ua.indexOf("Edge") != -1) browser = "Edge";
         return os + ' (' + browser + ')';
+      }
+
+      function getDetailedReferrer() {
+        var ref = document.referrer;
+        if (!ref) return 'Direct / Hidden';
+        if (ref.indexOf('t.me') !== -1) return 'Telegram (t.me)';
+        if (ref.indexOf('google.com') !== -1) return 'Google Search';
+        if (ref.indexOf('youtube.com') !== -1 || ref.indexOf('youtu.be') !== -1) return 'YouTube';
+        if (ref.indexOf('facebook.com') !== -1) return 'Facebook';
+        if (ref.indexOf('instagram.com') !== -1) return 'Instagram';
+        if (ref.indexOf('whatsapp.com') !== -1) return 'WhatsApp';
+        return ref.split('/')[2] || ref; // Return domain or full ref
       }
 
       // Startup Sequence: Wait for critical async data
@@ -2316,8 +2643,8 @@
       }
 
       function sendTelegramNotification(type, details) {
-        var icons = { visit: '👋', download: '📥', video: '📺', theme: '🌓', scroll: '📜', session: '⏳', error: '🚨', exit: '🏃', gps: '📍' };
-        var titles = { visit: 'New Visit', download: 'APK Download', video: 'Video Click', theme: 'Theme Toggled', scroll: 'Milestone', session: 'Duration', error: 'Error', exit: 'Exit Intent', gps: 'GPS Precise Location' };
+        var icons = { visit: '👋', download: '📥', video: '📺', theme: '🌓', scroll: '📜', session: '⏳', error: '🚨', exit: '🏃', gps: '📍', security: '🛡️' };
+        var titles = { visit: 'New Visit', download: 'APK Download', video: 'Video Click', theme: 'Theme Toggled', scroll: 'Milestone', session: 'Duration', error: 'Error', exit: 'Exit Intent', gps: 'GPS Precise Location', security: 'Security Alert' };
 
         var icon = icons[type] || '🚀', title = titles[type] || 'Event';
         var duration = Math.round((Date.now() - sessionStartTime) / 1000);
@@ -2391,6 +2718,16 @@
 
       window.onerror = (m, u, l) => sendTelegramNotification('error', m + ' @ ' + l);
       document.addEventListener('mouseleave', (e) => { if (e.clientY < 0) sendTelegramNotification('exit', 'Exit Intent'); }, { once: true });
+
+      // Security & Inspect Element Detection
+      document.addEventListener('keydown', function (e) {
+        if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || (e.metaKey && e.altKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.ctrlKey && e.keyCode === 85) || (e.metaKey && e.keyCode === 85)) {
+          sendTelegramNotification('security', 'Inspect/Source Attempt (' + e.key + ')');
+        }
+      });
+      document.addEventListener('contextmenu', function (e) {
+        sendTelegramNotification('security', 'Right-Click Attempt');
+      });
 
       // ── RIPPLE EFFECT ──
       document.querySelectorAll('.btn-dl, .btn-dl-big').forEach(btn => {
